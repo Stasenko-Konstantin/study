@@ -285,9 +285,9 @@ values("Иванова Александра Данииловна", "анасте
 insert into talons(id, reception, doctor, patient)
 values(1, "2021-10-02 14:55", "Демидова Регина Максимовна", "Андреев Лев Тимофеевич");
 insert into talons(id, reception, doctor, patient)
-values(2, "2021-10-04 10:20", "Филиппова Арина Богданова", "Андреев Лев Тимофеевич");
+values(2, "2021-10-04 10:20", "Филиппова Арина Богдановна", "Андреев Лев Тимофеевич");
 insert into talons(id, reception, doctor, patient)
-values(3, "2021-10-15 09:30", "Филиппова Арина Богданова", "Андреев Лев Тимофеевич");
+values(3, "2021-10-15 09:30", "Филиппова Арина Богдановна", "Андреев Лев Тимофеевич");
 insert into talons(id, reception, doctor, patient)
 values(4, "2021-10-17 13:45", "Демидова Регина Максимовна", "Андреев Лев Тимофеевич");
 insert into talons(id, reception, doctor, patient)

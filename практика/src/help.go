@@ -4,6 +4,8 @@ import (
 	"errors"
 	"log"
 	"os"
+	"sort"
+	"strings"
 )
 
 type myLogger struct {
@@ -49,10 +51,10 @@ func boolToStr(b bool) string {
 	return "false"
 }
 
-func stringConcat(vals []string) string {
+func stringConcat(vals []string, del string) string {
 	var r string
 	for _, e := range vals {
-		r += e + " "
+		r += e + " " + del
 	}
 	return r
 }
@@ -66,26 +68,41 @@ func contain(mas []string, e string) bool {
 	return false
 }
 
-func makeDocs(doctors [][]string) []string {
+func makePers() []string {
 	var r []string
 	i := 0
-	for _, d := range doctors {
+	for _, p := range talons {
 		if i == 0 {
 			i += 1
 		} else {
-			if d[3] != "0" {
-				r = append(r, d[0])
+			cp := strings.Split(p[1], "T")[0]
+			if !contain(r, cp) && cp != "0001-01-01" {
+				r = append(r, cp)
 			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func findPeriod(per string) string {
+	var r string
+	for _, d := range doctors {
+		if per == d[0] {
+			r = d[3]
 		}
 	}
 	return r
 }
 
-func findDoctor(doc string, doctors [][]string) string {
-	var r string
-	for _, d := range doctors {
-		if doc == d[0] {
-			r = d[3]
+func makePats() []string {
+	var r []string
+	i := 0
+	for _, p := range patients {
+		if i == 0 {
+			i += 1
+		} else {
+			r = append(r, p[2])
 		}
 	}
 	return r
