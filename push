@@ -4,7 +4,7 @@ if $1 == ""
 then
     echo "не хватает аргументов"
 else
-    zip -r поэд.zip поэд
+    zip -r учеба/поэд.zip поэд
     git add .
     git commit -m "$1"
     git push
