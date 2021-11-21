@@ -27,7 +27,7 @@ func sum(smth string) (int, string) {
 
 func Start() {
 	a := app.New()
-	w := a.NewWindow("практика")
+	w := a.NewWindow("dnc")
 	w.Resize(fyne.NewSize(400, 200))
 	w.CenterOnScreen()
 
