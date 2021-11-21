@@ -2,7 +2,6 @@ package src
 
 import (
 	"errors"
-	"log"
 	"os"
 	"sort"
 	"strings"
@@ -29,19 +28,19 @@ func (ml myLogger) Write(b []byte) (n int, err error) {
 	return n, err
 }
 
-func newLogger() *log.Logger {
+func newLogger() *myLogger {
 	if _, err := os.Stat("log.txt"); os.IsNotExist(err) {
 		f, err := os.Create("log.txt")
 		if err != nil {
 			panic("Не удалось создать логер!")
 		}
-		return log.New(myLogger{f, os.Stdout}, "INFO\t", log.Ltime)
+		return &myLogger{f, os.Stdout}
 	}
 	f, err := os.Open("log.txt")
 	if err != nil {
 		panic("Не удалось открыть логер!")
 	}
-	return log.New(myLogger{f, os.Stdout}, "INFO\t", log.Ltime)
+	return &myLogger{f, os.Stdout}
 }
 
 func boolToStr(b bool) string {

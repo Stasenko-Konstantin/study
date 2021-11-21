@@ -10,7 +10,6 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 	_ "github.com/mattn/go-sqlite3"
-	"log"
 	"os"
 	"reflect"
 	"strconv"
@@ -26,12 +25,12 @@ var (
 )
 
 func Start() {
-	newLogger()
+	mylog := newLogger()
 
 	defer func() {
 		if r := recover(); r != nil {
 			s := r.(error)
-			log.Printf(s.Error() + " aga")
+			mylog.Write([]byte(s.Error() + " aga"))
 		}
 	}()
 
@@ -40,7 +39,7 @@ func Start() {
 	w.Resize(fyne.NewSize(1800, 900))
 
 	connect()
-	log.Printf("DB connection complete")
+	mylog.Write([]byte("DB connection complete"))
 
 	for _, e := range dbs {
 		switch e.(type) {
@@ -70,7 +69,7 @@ func Start() {
 		}
 	}
 
-	log.Printf("Data is full")
+	mylog.Write([]byte("Data is full"))
 
 	patientsT := widget.NewTable(
 		func() (int, int) {
@@ -83,7 +82,7 @@ func Start() {
 			if i.Row == 0 {
 				o.(*fyne.Container).Objects[0] = widget.NewLabel(patients[i.Row][i.Col])
 			} else if i.Col == 7 {
-				o.(*fyne.Container).Objects[0] = widget.NewButton("Ок", func() {
+				o.(*fyne.Container).Objects[0] = widget.NewButton("", func() {
 					fmt.Println(i.Col, i.Row)
 				})
 			} else {
@@ -109,7 +108,7 @@ func Start() {
 			if i.Row == 0 {
 				o.(*fyne.Container).Objects[0] = widget.NewLabel(doctors[i.Row][i.Col])
 			} else if i.Col == 4 {
-				o.(*fyne.Container).Objects[0] = widget.NewButton("Ок", func() {})
+				o.(*fyne.Container).Objects[0] = widget.NewButton("", func() {})
 			} else {
 				o.(*fyne.Container).Objects[0].(*widget.Entry).SetText(doctors[i.Row][i.Col])
 			}
@@ -134,7 +133,7 @@ func Start() {
 	talonsT.SetColumnWidth(2, 300.0)
 	talonsT.SetColumnWidth(3, 300.0)
 
-	log.Printf("Table template ready")
+	mylog.Write([]byte("Table template ready"))
 
 	checkErr := func(err error) {
 		if err != nil {
@@ -353,7 +352,7 @@ func Start() {
 	requestsC.Resize(fyne.NewSize(1600, 200))
 	requestsC.Refresh()
 
-	log.Printf("Request fields ready")
+	mylog.Write([]byte("Request fields ready"))
 
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Пациенты", patientsT),
@@ -366,7 +365,7 @@ func Start() {
 						defer func() {
 							if r := recover(); r != nil {
 								s := reflect.ValueOf(r)
-								log.Printf(s.String())
+								mylog.Write([]byte(s.String()))
 								dialog.ShowError(errors.New(s.String()+"\nскорее всего неверный синтаксис ¯\\_:-/_/¯"), w)
 							}
 						}()
@@ -423,7 +422,7 @@ func Start() {
 
 	w.SetMainMenu(mainMenu)
 
-	log.Printf("Start render")
+	mylog.Write([]byte("Start render"))
 
 	w.SetContent(tabs)
 	w.ShowAndRun()
