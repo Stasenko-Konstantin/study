@@ -24,6 +24,10 @@ var (
 	talons = [][]string{[]string{"ID", "Дата и время приема", "Доктор", "Пациент", ""}}
 )
 
+//
+// Последний запрос - Манежная !!!!!!!!!!!!!!
+//
+
 func Start() {
 	mylog := newLogger()
 
@@ -160,11 +164,10 @@ func Start() {
 		requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where T.reception " + op + " " +
 			per)
 	})
-	opS.SetSelectedIndex(0)
 	r1 := container.NewVBox(container.NewHBox(opS), perS)
 	perS.Move(fyne.NewPos(0, 10))
 	perS.Refresh()
-	perS.SetSelectedIndex(0)
+	opS.SetSelectedIndex(0)
 
 	//2 выбрать врачей, лечивших конкретного пациента
 	pats := makePats()
@@ -172,129 +175,115 @@ func Start() {
 		requestE.SetText("T.doctor, T.reception from patients as P join talons as T on P.sfm = T.patient where P.sfm == \"" +
 			pat + "\"")
 	})
-	patS.SetSelectedIndex(0)
 	r2 := container.NewVBox(patS)
 	patS.Move(fyne.NewPos(0, 10))
 	patS.Refresh()
-	patS.SetSelectedIndex(0)
 
-	//3 вывести пациентов с одного участка
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////4 вывести пациентов, пользующихся одной страховой компанией
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////5 вывести пациентов за определенный период по дате их рождения
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////6 вывести пациентов, лечившихся у докторов определенной специализации
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////7 вывести пациентов, лечившихся у докторов из одного отделения
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////8 вывести пациентов одного пола
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
-	//
-	////9 вывести пациентов, живущих по одному и тому же месту жительства
-	//docs := makeDocs(doctors)
-	//docS := widget.NewSelect(docs, func(doc string) {
-	//	requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where P.district == " +
-	//		findDoctor(doc, doctors))
-	//})
-	//docS.SetSelectedIndex(0)
-	//t1 := container.NewHBox(docS)
-	//t1Size := t1.Size()
-	//t1.Resize(fyne.NewSize(300, t1Size.Height))
-	//r1 := container.NewWithoutLayout(t1)
-	//docS.Move(fyne.NewPos(0, 10))
-	//docS.Refresh()
-	//docS.SetSelectedIndex(0)
+	//3 выбрать пациентов, лечившихся у конкретного врача
+	docs := makeDocs()
+	docS := widget.NewSelect(docs, func(doc string) {
+		requestE.SetText("T.patient, T.reception from patients as P join talons as T on P.sfm = T.patient where D.sfm == \"" +
+			doc + "\"")
+	})
+	r3 := container.NewVBox(docS)
+	docS.Move(fyne.NewPos(0, 10))
+	docS.Refresh()
+
+	//4 вывести пациентов с одного участка
+	deps := makeDeps()
+	depS := widget.NewSelect(deps, func(dep string) {
+		requestE.SetText("P.sfm, P.birth, P.residence from patients as P where P.district == " +
+			dep)
+	})
+	r4 := container.NewHBox(depS)
+	depS.Move(fyne.NewPos(0, 10))
+	depS.Refresh()
+
+	//5 вывести пациентов, пользующихся одной страховой компанией
+	cmps := makeCmps()
+	cmpS := widget.NewSelect(cmps, func(cmp string) {
+		requestE.SetText("P.sfm, P.residence from patients as P where P.insurance_company == \"" +
+			cmp + "\"")
+	})
+	r5 := container.NewHBox(cmpS)
+	cmpS.Move(fyne.NewPos(0, 10))
+	cmpS.Refresh()
+
+	//6 вывести пациентов за определенный период по дате их рождения
+	var brtS *widget.Select
+	ops6 := []string{">", ">=", "<", "<=", "=="}
+	op6 := ops6[0]
+	opS6 := widget.NewSelect(ops6, func(opfS string) {
+		op6 = opfS
+		brtS.SetSelectedIndex(brtS.SelectedIndex())
+	})
+	brts := makeBrts()
+	brtS = widget.NewSelect(brts, func(brt string) {
+		requestE.SetText("P.sfm, P.residence from patients as P where P.birth " + op6 + " \"" +
+			brt + "\"")
+	})
+	r6 := container.NewVBox(container.NewHBox(opS6), brtS)
+	brtS.Move(fyne.NewPos(0, 10))
+	brtS.Refresh()
+	opS6.SetSelectedIndex(0)
+
+	//7 вывести пациентов, лечившихся у докторов определенной специализации
+	spcs := makeSpcs()
+	spcS := widget.NewSelect(spcs, func(spc string) {
+		requestE.SetText("P.sfm, P.residence, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where D.specialization == \"" +
+			spc + "\"")
+	})
+	r7 := container.NewVBox(spcS)
+	spcS.Move(fyne.NewPos(0, 10))
+	spcS.Refresh()
+
+	//8 вывести пациентов, лечившихся у докторов из одного отделения
+	otds := makeOtds()
+	otdS := widget.NewSelect(otds, func(otd string) {
+		requestE.SetText("P.sfm, P.birth, D.sfm from patients as P join doctors as D join talons as T on P.sfm = T.patient and D.sfm = T.doctor where D.department == \"" +
+			otd + "\"")
+	})
+	r8 := container.NewVBox(otdS)
+	otdS.Move(fyne.NewPos(0, 10))
+	otdS.Refresh()
+
+	//9 вывести пациентов одного пола
+	sexs := []string{"М.", "Ж."}
+	sexS := widget.NewSelect(sexs, func(sex string) {
+		rSex := "0"
+		if sex == "М." {
+			rSex = "1"
+		}
+		requestE.SetText("P.sfm, P.birth, P.residence from patients as P where P.sex == " +
+			rSex)
+	})
+	r9 := container.NewHBox(sexS)
+	sexS.Move(fyne.NewPos(0, 10))
+	sexS.Refresh()
+
+	//10 вывести пациентов, живущих по одному и тому же месту жительства
+	adrs := makeAdrs()
+	adrS := widget.NewSelect(adrs, func(adr string) {
+		requestE.SetText("P.sfm, P.birth, P.sex from patients as P where P.residence == \"" +
+			adr + "\"")
+	})
+	r10 := container.NewVBox(adrS)
+	adrS.Move(fyne.NewPos(0, 10))
+	adrS.Refresh()
 
 	perS.SetSelectedIndex(0) // из первого запроса
 
 	hideAll := func() {
 		r1.Hide()
 		r2.Hide()
-		//r3.Hide()
-		//r4.Hide()
-		//r5.Hide()
-		//r6.Hide()
-		//r7.Hide()
-		//r8.Hide()
-		//r9.Hide()
+		r3.Hide()
+		r4.Hide()
+		r5.Hide()
+		r6.Hide()
+		r7.Hide()
+		r8.Hide()
+		r9.Hide()
+		r10.Hide()
 	}
 	hideAll()
 	r1.Show()
@@ -302,6 +291,7 @@ func Start() {
 	rs := []string{
 		"Пациенты за конкретный период",
 		"Врачи лечившие конкретного пациента",
+		"Пациенты лечившиеся у конкретного врача",
 		"Пациенты с одного участка",
 		"Пациенты, пользующиеся одной страховой компанией",
 		"Пациенты за определенный период по дате их рождения",
@@ -315,22 +305,34 @@ func Start() {
 		switch r {
 		case rs[0]:
 			r1.Show()
+			perS.SetSelectedIndex(0)
 		case rs[1]:
 			r2.Show()
-		//case rs[2]:
-		//	r3.Show()
-		//case rs[3]:
-		//	r4.Show()
-		//case rs[4]:
-		//	r5.Show()
-		//case rs[5]:
-		//	r6.Show()
-		//case rs[6]:
-		//	r7.Show()
-		//case rs[7]:
-		//	r8.Show()
-		//case rs[8]:
-		//	r9.Show()
+			patS.SetSelectedIndex(0)
+		case rs[2]:
+			r3.Show()
+			docS.SetSelectedIndex(0)
+		case rs[3]:
+			r4.Show()
+			depS.SetSelectedIndex(0)
+		case rs[4]:
+			r5.Show()
+			cmpS.SetSelectedIndex(0)
+		case rs[5]:
+			r6.Show()
+			brtS.SetSelectedIndex(0)
+		case rs[6]:
+			r7.Show()
+			spcS.SetSelectedIndex(0)
+		case rs[7]:
+			r8.Show()
+			otdS.SetSelectedIndex(0)
+		case rs[8]:
+			r9.Show()
+			sexS.SetSelectedIndex(0)
+		case rs[9]:
+			r10.Show()
+			adrS.SetSelectedIndex(0)
 		}
 	})
 	requests.SetSelectedIndex(0)
@@ -339,13 +341,14 @@ func Start() {
 		requests,
 		r1,
 		r2,
-		//r3,
-		//r4,
-		//r5,
-		//r6,
-		//r7,
-		//r8,
-		//r9,
+		r3,
+		r4,
+		r5,
+		r6,
+		r7,
+		r8,
+		r9,
+		r10,
 		requestE,
 	)
 	requestsC.Move(fyne.NewPos(0.0, 300.0))

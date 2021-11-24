@@ -37,10 +37,10 @@ create table talons(
 
 insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
 values(1, "Astra-Metall", "Андреев Лев Тимофеевич",
-       "ул. Моторная, дом 4, квартира 651", "1974-01-08", 0, 1);
+       "ул. Моторная, дом 4, квартира 651", "1974-01-08", 1, 1);
 insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
 values(2, "Asko-Strakhovaniye", "Голикова Николь Серафимовна",
-       "ул. Римского-Корсакова 1-й пер, дом 179, квартира 961", "1987-06-06", 1, 1);
+       "ул. Римского-Корсакова 1-й пер, дом 179, квартира 961", "1987-06-06", 0, 1);
 insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
 values(3, "Asko-Strakhovaniye", "Леонов Павел Владиславович",
        "ул. Осипенко, дом 89, квартира 769", "1991-11-22", 1, 2);
@@ -139,7 +139,7 @@ values(34, "Asko-Strakhovaniye", "Кузнецов Владислав Мирон
        "ул. Почтовая Б., дом 102, квартира 242", "1985-02-05", 1, 12);
 insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
 values(35, "Rosno", "Анисимова Яна Степановна",
-       "ул. Гамбургская пл, дом 121, квартира 146", "1973-11-07", 1, 8);
+       "ул. Гамбургская пл, дом 121, квартира 146", "1973-11-07", 0, 8);
 insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
 values(36, "Astra-Metall", "Романов Михаил Михайлович",
        "ул. Туннельная, дом 7, квартира 100", "1984-07-23", 1, 13);

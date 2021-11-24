@@ -74,7 +74,7 @@ func makePers() []string {
 		if i == 0 {
 			i += 1
 		} else {
-			cp := strings.Split(p[1], "T")[0]
+			cp := strings.Split(p[1], " ")[0]
 			if !contain(r, cp) && cp != "0001-01-01" {
 				r = append(r, cp)
 			}
@@ -84,11 +84,108 @@ func makePers() []string {
 	return r
 }
 
-func findPeriod(per string) string {
-	var r string
+func makeDocs() []string {
+	var r []string
+	i := 0
+	for _, p := range talons {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[2]) {
+				r = append(r, p[2])
+			}
+		}
+	}
+	return r
+}
+
+func makeDeps() []string {
+	var r []string
+	i := 0
+	for _, p := range patients {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[6]) {
+				r = append(r, p[6])
+			}
+		}
+	}
+	return r
+}
+
+func makeCmps() []string {
+	var r []string
+	i := 0
+	for _, p := range patients {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[1]) {
+				r = append(r, p[1])
+			}
+		}
+	}
+	return r
+}
+
+func makeBrts() []string {
+	var r []string
+	i := 0
+	for _, p := range patients {
+		if i == 0 {
+			i += 1
+		} else {
+			cp := strings.Split(p[4], " ")[0]
+			if !contain(r, cp) && cp != "0001-01-01" {
+				r = append(r, cp)
+			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func makeSpcs() []string {
+	var r []string
+	i := 0
 	for _, d := range doctors {
-		if per == d[0] {
-			r = d[3]
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, d[2]) {
+				r = append(r, d[2])
+			}
+		}
+	}
+	return r
+}
+
+func makeOtds() []string {
+	var r []string
+	i := 0
+	for _, d := range doctors {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, d[1]) {
+				r = append(r, d[1])
+			}
+		}
+	}
+	return r
+}
+
+func makeAdrs() []string {
+	var r []string
+	i := 0
+	for _, p := range patients {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[3]) {
+				r = append(r, p[3])
+			}
 		}
 	}
 	return r
@@ -101,7 +198,9 @@ func makePats() []string {
 		if i == 0 {
 			i += 1
 		} else {
-			r = append(r, p[2])
+			if !contain(r, p[2]) {
+				r = append(r, p[2])
+			}
 		}
 	}
 	return r
