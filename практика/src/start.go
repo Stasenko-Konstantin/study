@@ -182,7 +182,7 @@ func Start() {
 	//3 выбрать пациентов, лечившихся у конкретного врача
 	docs := makeDocs()
 	docS := widget.NewSelect(docs, func(doc string) {
-		requestE.SetText("T.patient, T.reception from patients as P join talons as T on P.sfm = T.patient where D.sfm == \"" +
+		requestE.SetText("T.patient, T.reception from patients as P join talons as T join doctors as D on P.sfm = T.patient where D.sfm == \"" +
 			doc + "\"")
 	})
 	r3 := container.NewVBox(docS)
@@ -355,7 +355,7 @@ func Start() {
 	requestsC.Resize(fyne.NewSize(1600, 200))
 	requestsC.Refresh()
 
-	mylog.Write([]byte("Request fields ready"))
+	mylog.Write([]byte("Request fields ready\n"))
 
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Пациенты", patientsT),
@@ -368,7 +368,7 @@ func Start() {
 						defer func() {
 							if r := recover(); r != nil {
 								s := reflect.ValueOf(r)
-								mylog.Write([]byte(s.String()))
+								mylog.Write([]byte(s.String() + "\n"))
 								dialog.ShowError(errors.New(s.String()+"\nскорее всего неверный синтаксис ¯\\_:-/_/¯"), w)
 							}
 						}()
@@ -425,7 +425,7 @@ func Start() {
 
 	w.SetMainMenu(mainMenu)
 
-	mylog.Write([]byte("Start render"))
+	mylog.Write([]byte("Start render\n"))
 
 	w.SetContent(tabs)
 	w.ShowAndRun()

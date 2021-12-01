@@ -35,6 +35,8 @@ func Start() {
 	monthE := widget.NewEntry()
 	happyYearL := widget.NewLabel("")
 
+	dayE.FocusGained()
+
 	w.SetContent(container.NewVBox(
 		widget.NewLabel("Введите день и месяц своего рождения\nПосле нажатия кнопки \"Ok\" выведется ваш\nближайший счастливый год"),
 		container.NewHBox(
@@ -107,9 +109,9 @@ func Start() {
 
 	prog := "Программа по \"Документации и сертификации\":\n\"Разработка программы для вычисления\nсвоего ближайшего счастливого года\""
 	author := "Курсант 432 гр. ТАТК ГА Стасенко Константин"
-	mainMenu := fyne.NewMainMenu(fyne.NewMenu("Меню",
-		fyne.NewMenuItem("О программе", func() { dialog.ShowInformation("О программе", prog, w) }),
-		fyne.NewMenuItem("Об авторе", func() { dialog.ShowInformation("Об авторе", author, w) }),
+	mainMenu := fyne.NewMainMenu(fyne.NewMenu("Menu",
+		fyne.NewMenuItem("Program", func() { dialog.ShowInformation("О программе", prog, w) }),
+		fyne.NewMenuItem("Author", func() { dialog.ShowInformation("Об авторе", author, w) }),
 	))
 	w.SetMainMenu(mainMenu)
 
