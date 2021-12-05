@@ -1,0 +1,12 @@
+---
+title: "г. Владимир"
+featured_image: "https://lh3.googleusercontent.com/proxy/e3a1xXtTVRjc-I8bPUnlRVZFd845Y543HBP6SJOw8heOgTxMGot78ij6AOrTDNrqmccIDi84Ew2e9vDjteMVJYu6pcfTxthvgiG3VXG_nt6OcZ-4N-5lW-CMgjFs7XPPOCZsA-W2AihwMbXoYZ0CLIyZ7WTCivn_DYAOWsgsW-YIKUhYzYdXKF7Z9hRzrdyj41ocWQf9IwiU23FBTwC4hXf94CUp0aBDvup6v79HnGy750hkjMNAnWHh1_TD5ccE-y_WtgROeWo3SpvVLfvCutTsgsS9RP-GMz7xI8QuntNjObQ2h4LF_ZEuO2t1TuSdots-ViLJBstXXt800IkpN5wJtN8KnxsuxSFdYK2bHy_dKIlZXLEWnMpndMPTrqHk144oqHWb7VdGVi8U2Bg4rorImMl6dNf-Ahhzd0EymYPez6XNpiduRBVNLL-u-IVEPS9lJejIq0xFvvV4viOlxzB8qj83KRMWSnE59M6VJCZapTmDpiTBP2RL87itAWf4jYeO1AqMhyKK3PemJzkxqx4HuMDXeDnWAIM1_EENUdq0DEuiNIRe7L6Jh447D9tk5_I77Y5PsRORObR22bzhE1XY9T_OL4Vg7wMSN2BQD2pECSUPPthJk4MpfVVnAnMthAAkgF6I4VsjD4vdoy4"
+---
+
+Владимир — это уникальный старинный русский город, где можно познакомиться с
+настоящей Россией, увидеть очарование древней архитектуры, бережно сохраненной природы. 
+Во Владимире Вы осмотрите памятники архитектуры ХII века: Успенский собор, построенный 
+князем Андреем Боголюбским. Дмитровский собор, сооруженный Всеволодом III
+как дворцовый храм. В его скульптурном убранстве около полутора тысяч рельефов,
+знаменитые на весь мир Золотые ворота 1164 года, имевшие оборонное и триумфальное значение
+при князе Андрее Боголюбском.
