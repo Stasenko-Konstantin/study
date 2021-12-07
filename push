@@ -5,7 +5,7 @@ then
     echo "не хватает аргументов"
 else
     rm поэд.zip
-    zip -r поэд.zip учеба/1с
+    zip -r поэд.zip учеба/1с учеба/инд
     git add .
     git commit -m "$1"
     git push
