@@ -64,7 +64,7 @@
       <w>100</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>СУБД</panel_attributes>
+    <panel_attributes>SQLite</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -163,7 +163,7 @@
       <w>100</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>База данных</panel_attributes>
+    <panel_attributes>db.db</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

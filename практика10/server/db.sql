@@ -1,827 +1,337 @@
 ﻿.open db.db
 .headers on
-.mode line
 
-drop table doctors;
-drop table patients;
-drop table talons;
+drop table clients;
+drop table librarians;
+drop table givings;
+drop table cassettes;
+drop table films;
 
-create table patients(
+create table clients(
     id integer not null primary key,
-    insurance_company text not null,
     sfm text not null,
-    residence text not null,
-    birth date not null,
-    sex boolean not null,
-    district integer not null,
-
-    foreign key(district) references doctors(district)
+    residence text not null
 );
 
-create table doctors(
-    sfm text not null primary key,
-    department text not null,
-    specialization text not null,
-    district integer unique
-);
-
-create table talons(
+create table librarians(
     id integer not null primary key,
-    reception date not null,
-    doctor text not null,
-    patient integer not null,
-
-    foreign key(patient) references patients(id),
-    foreign key(doctor) references doctors(sfm)
+    sfm text not null
 );
 
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(1, "Astra-Metall", "Андреев Лев Тимофеевич",
-       "ул. Моторная, дом 4, квартира 651", "1974-01-08", 1, 1);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(2, "Asko-Strakhovaniye", "Голикова Николь Серафимовна",
-       "ул. Римского-Корсакова 1-й пер, дом 179, квартира 961", "1987-06-06", 0, 1);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(3, "Asko-Strakhovaniye", "Леонов Павел Владиславович",
-       "ул. Осипенко, дом 89, квартира 769", "1991-11-22", 1, 2);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(4, "Astra-Metall", "Рябов Максим Даниилович",
-       "ул. Курчатова, дом 173, квартира 324", "1989-04-04", 1, 3);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(5, "Rosno", "Худякова Алиса Тимофеевна",
-       "ул. Звонарский пер, дом 188, квартира 205", "1976-09-08", 0, 3);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(6, "Asko-Strakhovaniye", "Назаров Игорь Степанович",
-       "ул. Инессы Арманд, дом 59, квартира 352", "1984-10-24", 1, 3);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(7, "Astra-Metall", "Гусева Яна Ивановна",
-       "ул. Строительный проезд, дом 168, квартира 455", "1996-12-27", 0, 4);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(8, "Astra-Metall", "Калашников Матвей Кириллович",
-       "ул. Николая Химушина, дом 190, квартира 214", "1991-10-28", 1, 5);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(9, "Rosno", "Горелова Полина Алексеевна",
-       "ул. Кавказский пер, дом 119, квартира 130", "1973-10-01", 0, 5);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(10, "Rosno", "Куликова Варвара Артемьевна",
-       "ул. Красной Сосны 13-я линия, дом 93, квартира 405", "1987-04-13", 0, 6);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(11, "Astra-Metall", "Ершова Таисия Ярославовна",
-       "ул. Манежная, дом 191, квартира 174", "1973-11-04", 0, 7);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(12, "Rosno", "Полякова Кристина Сергеевна",
-       "ул. Пойма реки Каменки, дом 146, квартира 148", "1975-03-20", 0, 7);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(13, "Asko-Strakhovaniye", "Воробьева Элина Ильинична",
-       "ул. Моссельмаш ст, дом 18, квартира 211", "1975-04-04", 0, 7);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(14, "Rosno", "Никитин Святослав Павлович",
-       "ул. Гамбургская пл, дом 121, квартира 146", "1985-06-25", 1, 8);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(15, "Astra-Metall", "Коновалова Мария Ивановна",
-       "ул. Кржижановского, дом 183, квартира 957", "1999-10-11", 0, 8);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(16, "Rosno", "Захаров Матвей Даниилович",
-       "ул. Ростовский 2-й пер, дом 125, квартира 791", "", 1, 9);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(17, "Astra-Metall", "Смирнова Арина Яковлевна",
-       "ул. Взлетная, дом 65, квартира 406", "1997-10-01", 0, 10);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(18, "Asko-Strakhovaniye", "Кольцов Алексей Леонович",
-       "ул. Нежинская, дом 176, квартира 687", "1971-10-11", 1, 10);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(19, "Astra-Metall", "Сергеева Дарья Максимовна",
-       "ул. Нежинская, дом 10, квартира 8", "", 0, 10);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(20, "Astra-Metall", "Софронов Матвей Артёмович",
-       "ул. Широкий проезд, дом 103, квартира 375", "1973-09-17", 1, 10);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(21, "Rosno", "Хомякова Александра Платоновна",
-       "ул. Манежная, дом 191, квартира 174", "1980-12-01", 0, 7);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(22, "Rosno", "Майорова Кристина Артёмовна",
-       "ул. Зеленый пр-кт, дом 95, квартира 848", "1972-12-06", 0, 10);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(23, "Astra-Metall", "Богданов Святослав Владимирович",
-       "ул. Новоспасский пер, дом 16, квартира 44", "1972-02-08", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(24, "Rosno", "Муравьев Даниил Адамович",
-       "ул. Неверовского, дом 118, квартира 952", "1999-05-08", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(25, "Asko-Strakhovaniye", "Болдырев Леонид Борисович",
-       "ул. Михайловский Верхн. 4-й проезд, дом 194, квартира 616", "1984-06-04", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(26, "Asko-Strakhovaniye", "Васильев Георгий Андреевич",
-       "ул. Зенитная, дом 32, квартира 24", "1971-04-22", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(27, "Astra-Metall", "Никонов Роман Артёмович",
-       "ул. Перова Поля 3-й проезд, дом 81, квартира 732", "1977-07-18", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(28, "Rosno", "Морозов Тимофей Фёдорович",
-       "ул. Перова Поля 3-й проезд, дом 1, квартира 56", "2000-02-02", 1, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(29, "Asko-Strakhovaniye", "Покровская Ангелина Дмитриевна",
-       "ул. Буденного пр-кт, дом 48, квартира 812", "1975-09-26", 0, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(30, "Rosno", "Попова Зоя Сергеевна",
-       "ул. Зенитная, дом 32, квартира 24", "1971-07-08", 0, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(31, "Astra-Metall", "Зайцева София Александровна",
-       "ул. Новокуркинское ш, дом 45, квартира 369", "1992-08-10", 0, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(32, "Rosno", "Молчанова Маргарита Егоровна",
-       "ул. Каштановая 1-я, дом 182, квартира 940", "1971-03-08", 0, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(33, "Astra-Metall", "Рыбаков Егор Павлович",
-       "ул. Ганнушкина наб, дом 124, квартира 783", "1999-10-28", 1, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(34, "Asko-Strakhovaniye", "Кузнецов Владислав Миронович",
-       "ул. Почтовая Б., дом 102, квартира 242", "1985-02-05", 1, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(35, "Rosno", "Анисимова Яна Степановна",
-       "ул. Гамбургская пл, дом 121, квартира 146", "1973-11-07", 0, 8);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(36, "Astra-Metall", "Романов Михаил Михайлович",
-       "ул. Туннельная, дом 7, квартира 100", "1984-07-23", 1, 13);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(37, "Rosno", "Савин Роман Альбертович",
-       "ул. Алымова, дом 29, квартира 957", "1999-07-24", 1, 13);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(38, "Asko-Strakhovaniye", "Носов Никита Михайлович",
-       "ул. Пушкарсркая Малая, дом 16, квартира 308", "1991-05-20", 1, 13);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(39, "Rosno", "Власов Максим Иванович",
-       "ул. Ковенский пер, дом 25, квартира 339", "1972-03-19", 1, 13);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(40, "Asko-Strakhovaniye", "Гаврилова Дарья Григорьевна",
-       "ул. Алымова, дом 29, квартира 957", "1983-10-25", 0, 13);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(41, "Asko-Strakhovaniye", "Смирнов Константин Семёнович",
-       "ул. Каштановая 1-я, дом 182, квартира 940", "1993-08-09", 1, 12);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(42, "Astra-Metall", "Зуева Тамара Кирилловна",
-       "ул. Борьбы пл, дом 75, квартира 705", "1986-04-17", 0, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(43, "Rosno", "Семенов Даниил Иванович",
-       "ул. Борьбы пл, дом 75, квартира 704", "1986-04-17", 1, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(44, "Astra-Metall", "Кузьмина Александра Альбертовна",
-       "ул. Перуновский пер, дом 177, квартира 697", "1997-10-13", 0, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(45, "Rosno", "Макаров Владислав Робертович",
-       "ул. Волжский Бьвар 95-й кв-л, дом 77, квартира 770", "1998-08-21", 1, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(46, "Asko-Strakhovaniye", "Смирнова Александра Данииловна",
-       "ул. Прожекторная, дом 187, квартира 730", "1977-03-03", 0, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(47, "Astra-Metall", "Панова Стефания Руслановна",
-       "ул. Эрнста Тельмана пл, дом 159, квартира 8", "1974-10-15", 0, 14);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(48, "Asko-Strakhovaniye", "Сидорова Алиса Романовна",
-       "ул. Рубиновая, дом 146, квартира 651", "1973-12-13", 0, 15);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(49, "Rosno", "Еремин Илья Кириллович",
-       "ул. Полянка Б., дом 56, квартира 288", "1994-09-07", 1, 15);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(50, "Rosno", "Ситников Алексей Ярославович",
-       "ул. Шелепихинское ш, дом 23, квартира 570", "1972-07-16", 1, 15);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(51, "Astra-Metall", "Молчанов Руслан Алексеевич",
-       "ул. Ростовский 2-й пер, дом 125, квартира 791", "2001-04-11", 1, 9);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(52, "Asko-Strakhovaniye", "Данилова Василиса Кирилловна",
-       "ул. Дворцовая Правая аллея, дом 102, квартира 60", "2001-04-11", 0, 15);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(53, "Rosno", "Александрова Анастасия Дмитриевна",
-       "ул. Амурская, дом 88, квартира 182", "1989-09-06", 0, 15);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(54, "Astra-Metall", "Фролов Владимир Александрович",
-       "ул. Троицкая пл, дом 178, квартира 888", "1998-11-05", 1, 16);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(55, "Astra-Metall", "Гаврилова Аврора Романовна",
-       "ул. 9-я Линия линия, дом 4, квартира 666", "1987-02-21", 0, 16);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(56, "Astra-Metall", "Борисов Алексей Николаевич",
-       "ул. Днепропетровская (Фрунзенский), дом 108, квартира 1488", "1996-12-20", 1, 16);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(57, "Rosno", "Меркулова Вера Фёдоровна",
-       "ул. Неверовского, дом 118, квартира 952", "1996-12-20", 0, 11);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(58, "Astra-Metall", "Фадеев Евгений Леонович",
-       "ул. Космонавтов, дом 4, квартира 228", "1989-08-28", 1, 16);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(59, "Asko-Strakhovaniye", "Ершов Савелий Павлович",
-       "ул. Манежная, дом 191, квартира 174", "1971-02-14", 1, 7);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(60, "Rosno", "Рыжов Александр Тихонович",
-       "ул. Чагинская, дом 142, квартира 629", "1984-06-16", 1, 17);
-insert into patients(id, insurance_company, sfm, residence, birth, sex, district)
-values(61, "Astra-Metall", "Стасенко Константин Юрьевич",
-       "ул. Черского проезд, дом 154, квартира 566", "2002-10-03", 1, 17);
+create table films(
+    name text not null,
+    year text not null,
+    director text not null,
+    genre text not null,
+    timeline integer not null,
+    studio text,
 
-insert into doctors(sfm, department, specialization, district)
-values("Демидова Регина Максимовна", "терапевтическое", "врач-участковый", 1);
-insert into doctors(sfm, department, specialization, district)
-values("Андрианова Анна Львовна", "терапевтическое", "врач-участковый", 2);
-insert into doctors(sfm, department, specialization, district)
-values("Чистякова Элина Дмитриевна", "терапевтическое", "врач-участковый", 3);
-insert into doctors(sfm, department, specialization, district)
-values("Гуров Дмитрий Львович", "терапевтическое", "врач-участковый", 4);
-insert into doctors(sfm, department, specialization, district)
-values("Муравьев Кирилл Степанович", "терапевтическое", "врач-участковый", 5);
-insert into doctors(sfm, department, specialization, district)
-values("Сахаров Максим Арсенович", "терапевтическое", "врач-участковый", 6);
-insert into doctors(sfm, department, specialization, district)
-values("Попов Александр Александрович", "терапевтическое", "врач-участковый", 7);
-insert into doctors(sfm, department, specialization, district)
-values("Чернышева Софья Михайловна", "терапевтическое", "врач-участковый", 8);
-insert into doctors(sfm, department, specialization, district)
-values("Фомичева Ясмина Никитична", "терапевтическое", "врач-участковый", 9);
-insert into doctors(sfm, department, specialization, district)
-values("Дружинина Дарья Данииловна", "терапевтическое", "врач-участковый", 10);
-insert into doctors(sfm, department, specialization, district)
-values("Рыбакова Алёна Михайловна", "терапевтическое", "врач-участковый", 11);
-insert into doctors(sfm, department, specialization, district)
-values("Соколов Святослав Ильич", "терапевтическое", "врач-участковый", 12);
-insert into doctors(sfm, department, specialization, district)
-values("Мартынов Никита Захарович", "терапевтическое", "врач-участковый", 13);
-insert into doctors(sfm, department, specialization, district)
-values("Исаков Арсений Петрович", "терапевтическое", "врач-участковый", 14);
-insert into doctors(sfm, department, specialization, district)
-values("Данилова Василиса Кирилловна", "терапевтическое", "врач-участковый", 15);
-insert into doctors(sfm, department, specialization, district)
-values("Алексеева Майя Андреевна", "терапевтическое", "врач-участковый", 16);
-insert into doctors(sfm, department, specialization, district)
-values("Литвинова Милана Глебовна", "терапевтическое", "врач-участковый", 17);
-insert into doctors(sfm, department, specialization, district)
-values("Федорова Анна Демидовна", "терапевтическое", "дежурный врач", null);
-insert into doctors(sfm, department, specialization, district)
-values("Скворцова Есения Дмитриевна", "терапевтическое", "дежурный врач", null);
-insert into doctors(sfm, department, specialization, district)
-values("Позднякова Дарья Александровна", "хирургическое (гнойное)", "хирург-онколог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Петровская Валерия Тимофеевна", "хирургическое (гнойное)", "хирург-проктолог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Симонов Владимир Артёмович", "хирургическое (чистое)", "хирург общего профиля", null);
-insert into doctors(sfm, department, specialization, district)
-values("Игнатьева Сафия Дмитриевна", "хирургическое (чистое)", "хирург общего профиля", null);
-insert into doctors(sfm, department, specialization, district)
-values("Пономарев Лев Романович", "гинекологическое", "гинеколог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Филиппова Арина Богдановна", "ортопедическое", "ортопед", null);
-insert into doctors(sfm, department, specialization, district)
-values("Волков Игорь Дмитриевич", "кардиологическое", "кардиолог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Панов Артемий Егорович", "травматологическое", "травматолог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Бочаров Даниил Святославович", "урологическое", "уролог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Харитонова Александра Арсентьевна", "стоматологическое", "стоматолог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Леонов Александр Тимурович", "офтальмологическое", "офтальмолог", null);
-insert into doctors(sfm, department, specialization, district)
-values("Иванова Александра Данииловна", "анастезиолого-реанимационное", "реаниматолог", null);
+    primary key(name, year)
+);
 
-insert into talons(id, reception, doctor, patient)
-values(1, "2021-10-02 14:55", "Демидова Регина Максимовна", "Андреев Лев Тимофеевич");
-insert into talons(id, reception, doctor, patient)
-values(2, "2021-10-04 10:20", "Филиппова Арина Богдановна", "Андреев Лев Тимофеевич");
-insert into talons(id, reception, doctor, patient)
-values(3, "2021-10-15 09:30", "Филиппова Арина Богдановна", "Андреев Лев Тимофеевич");
-insert into talons(id, reception, doctor, patient)
-values(4, "2021-10-17 13:45", "Демидова Регина Максимовна", "Андреев Лев Тимофеевич");
-insert into talons(id, reception, doctor, patient)
-values(5, "2021-10-02 10:15", "Демидова Регина Максимовна", "Голикова Николь Серафимовна");
-insert into talons(id, reception, doctor, patient)
-values(6, "2021-10-01 09:10", "Андрианова Анна Львовна", "Леонов Павел Владиславович");
-insert into talons(id, reception, doctor, patient)
-values(7, "2021-10-03 11:40", "Андрианова Анна Львовна", "Леонов Павел Владиславович");
-insert into talons(id, reception, doctor, patient)
-values(8, "2021-10-07 12:20", "Андрианова Анна Львовна", "Леонов Павел Владиславович");
-insert into talons(id, reception, doctor, patient)
-values(9, "2021-10-03 14:20", "Чистякова Элина Дмитриевна", "Рябов Максим Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(10, "2021-10-04 12:10", "Петровская Валерия Тимофеевна", "Рябов Максим Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(11, "2021-10-07 09:35", "Чистякова Элина Дмитриевна", "Рябов Максим Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(12, "2021-10-11 11:39", "Петровская Валерия Тимофеевна", "Рябов Максим Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(13, "2021-10-15 15:45", "Чистякова Элина Дмитриевна", "Рябов Максим Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(14, "", "", "Худякова Алиса Тимофеевна");
-insert into talons(id, reception, doctor, patient)
-values(15, "", "", "Худякова Алиса Тимофеевна");
-insert into talons(id, reception, doctor, patient)
-values(16, "", "", "Назаров Игорь Степанович");
-insert into talons(id, reception, doctor, patient)
-values(17, "", "", "Назаров Игорь Степанович");
-insert into talons(id, reception, doctor, patient)
-values(18, "", "", "Назаров Игорь Степанович");
-insert into talons(id, reception, doctor, patient)
-values(19, "", "", "Гусева Яна Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(20, "", "", "Гусева Яна Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(21, "", "", "Гусева Яна Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(22, "", "", "Гусева Яна Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(23, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(24, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(25, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(26, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(27, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(28, "", "", "Калашников Матвей Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(29, "", "", "Горелова Полина Алексеевна");
-insert into talons(id, reception, doctor, patient)
-values(30, "", "", "Горелова Полина Алексеевна");
-insert into talons(id, reception, doctor, patient)
-values(31, "", "", "Горелова Полина Алексеевна");
-insert into talons(id, reception, doctor, patient)
-values(32, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(33, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(34, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(35, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(36, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(37, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(38, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(39, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(40, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(41, "", "", "Куликова Варвара Артемьевна");
-insert into talons(id, reception, doctor, patient)
-values(42, "", "", "Ершова Таисия Ярославовна");
-insert into talons(id, reception, doctor, patient)
-values(43, "", "", "Ершова Таисия Ярославовна");
-insert into talons(id, reception, doctor, patient)
-values(44, "", "", "Полякова Кристина Сергеевна");
-insert into talons(id, reception, doctor, patient)
-values(45, "", "", "Воробьева Элина Ильинична");
-insert into talons(id, reception, doctor, patient)
-values(46, "", "", "Воробьева Элина Ильинична");
-insert into talons(id, reception, doctor, patient)
-values(47, "", "", "Воробьева Элина Ильинична");
-insert into talons(id, reception, doctor, patient)
-values(48, "", "", "Воробьева Элина Ильинична");
-insert into talons(id, reception, doctor, patient)
-values(49, "", "", "Никитин Святослав Павлович");
-insert into talons(id, reception, doctor, patient)
-values(50, "", "", "Никитин Святослав Павлович");
-insert into talons(id, reception, doctor, patient)
-values(51, "", "", "Никитин Святослав Павлович");
-insert into talons(id, reception, doctor, patient)
-values(52, "", "", "Никитин Святослав Павлович");
-insert into talons(id, reception, doctor, patient)
-values(53, "", "", "Никитин Святослав Павлович");
-insert into talons(id, reception, doctor, patient)
-values(54, "", "", "Коновалова Мария Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(55, "", "", "Коновалова Мария Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(56, "", "", "Коновалова Мария Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(57, "", "", "Коновалова Мария Ивановна");
-insert into talons(id, reception, doctor, patient)
-values(58, "", "", "Захаров Матвей Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(59, "", "", "Захаров Матвей Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(60, "", "", "Захаров Матвей Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(61, "", "", "Захаров Матвей Даниилович");
-insert into talons(id, reception, doctor, patient)
-values(62, "", "", "Смирнова Арина Яковлевна");
-insert into talons(id, reception, doctor, patient)
-values(63, "", "", "Смирнова Арина Яковлевна");
-insert into talons(id, reception, doctor, patient)
-values(64, "", "", "Смирнова Арина Яковлевна");
-insert into talons(id, reception, doctor, patient)
-values(65, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(66, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(67, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(68, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(69, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(70, "", "", "Кольцов Алексей Леонович");
-insert into talons(id, reception, doctor, patient)
-values(71, "", "", "Сергеева Дарья Максимовна");
-insert into talons(id, reception, doctor, patient)
-values(72, "", "", "Софронов Матвей Артёмович");
-insert into talons(id, reception, doctor, patient)
-values(73, "", "", "Софронов Матвей Артёмович");
-insert into talons(id, reception, doctor, patient)
-values(74, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(75, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(76, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(77, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(78, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(79, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(80, "", "", "Хомякова Александра Платоновна");
-insert into talons(id, reception, doctor, patient)
-values(81, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(82, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(83, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(84, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(85, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(86, "", "", "Майорова Кристина Артёмовна");
-insert into talons(id, reception, doctor, patient)
-values(87, "", "", "Богданов Святослав Владимирович");
-insert into talons(id, reception, doctor, patient)
-values(88, "", "", "Богданов Святослав Владимирович");
-insert into talons(id, reception, doctor, patient)
-values(89, "", "", "Богданов Святослав Владимирович");
-insert into talons(id, reception, doctor, patient)
-values(90, "", "", "Богданов Святослав Владимирович");
-insert into talons(id, reception, doctor, patient)
-values(91, "", "", "Богданов Святослав Владимирович");
-insert into talons(id, reception, doctor, patient)
-values(92, "", "", "Муравьев Даниил Адамович");
-insert into talons(id, reception, doctor, patient)
-values(93, "", "", "Муравьев Даниил Адамович");
-insert into talons(id, reception, doctor, patient)
-values(94, "", "", "Муравьев Даниил Адамович");
-insert into talons(id, reception, doctor, patient)
-values(95, "", "", "Муравьев Даниил Адамович");
-insert into talons(id, reception, doctor, patient)
-values(96, "", "", "Муравьев Даниил Адамович");
-insert into talons(id, reception, doctor, patient)
-values(97, "", "", "Болдырев Леонид Борисович");
-insert into talons(id, reception, doctor, patient)
-values(98, "", "", "Болдырев Леонид Борисович");
-insert into talons(id, reception, doctor, patient)
-values(99, "", "", "Болдырев Леонид Борисович");
-insert into talons(id, reception, doctor, patient)
-values(100, "", "", "Болдырев Леонид Борисович");
-insert into talons(id, reception, doctor, patient)
-values(101, "", "", "Васильев Георгий Андреевич");
-insert into talons(id, reception, doctor, patient)
-values(102, "", "", "Васильев Георгий Андреевич");
-insert into talons(id, reception, doctor, patient)
-values(103, "", "", "Васильев Георгий Андреевич");
-insert into talons(id, reception, doctor, patient)
-values(104, "", "", "Васильев Георгий Андреевич");
-insert into talons(id, reception, doctor, patient)
-values(105, "", "", "Никонов Роман Артёмович");
-insert into talons(id, reception, doctor, patient)
-values(106, "", "", "Никонов Роман Артёмович");
-insert into talons(id, reception, doctor, patient)
-values(107, "", "", "Никонов Роман Артёмович");
-insert into talons(id, reception, doctor, patient)
-values(108, "", "", "Морозов Тимофей Фёдорович");
-insert into talons(id, reception, doctor, patient)
-values(109, "", "", "Морозов Тимофей Фёдорович");
-insert into talons(id, reception, doctor, patient)
-values(110, "", "", "Морозов Тимофей Фёдорович");
-insert into talons(id, reception, doctor, patient)
-values(111, "", "", "Покровская Ангелина Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(112, "", "", "Покровская Ангелина Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(113, "", "", "Покровская Ангелина Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(114, "", "", "Покровская Ангелина Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(115, "", "", "Покровская Ангелина Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(116, "", "", "Попова Зоя Сергеевна");
-insert into talons(id, reception, doctor, patient)
-values(117, "", "", "Попова Зоя Сергеевна");
-insert into talons(id, reception, doctor, patient)
-values(118, "", "", "Попова Зоя Сергеевна");
-insert into talons(id, reception, doctor, patient)
-values(119, "", "", "Попова Зоя Сергеевна");
-insert into talons(id, reception, doctor, patient)
-values(120, "", "", "Зайцева София Александровна");
-insert into talons(id, reception, doctor, patient)
-values(121, "", "", "Зайцева София Александровна");
-insert into talons(id, reception, doctor, patient)
-values(122, "", "", "Зайцева София Александровна");
-insert into talons(id, reception, doctor, patient)
-values(123, "", "", "Зайцева София Александровна");
-insert into talons(id, reception, doctor, patient)
-values(124, "", "", "Молчанова Маргарита Егоровна");
-insert into talons(id, reception, doctor, patient)
-values(125, "", "", "Молчанова Маргарита Егоровна");
-insert into talons(id, reception, doctor, patient)
-values(126, "", "", "Молчанова Маргарита Егоровна");
-insert into talons(id, reception, doctor, patient)
-values(127, "", "", "Молчанова Маргарита Егоровна");
-insert into talons(id, reception, doctor, patient)
-values(128, "", "", "Рыбаков Егор Павлович");
-insert into talons(id, reception, doctor, patient)
-values(129, "", "", "Рыбаков Егор Павлович");
-insert into talons(id, reception, doctor, patient)
-values(130, "", "", "Рыбаков Егор Павлович");
-insert into talons(id, reception, doctor, patient)
-values(131, "", "", "Рыбаков Егор Павлович");
-insert into talons(id, reception, doctor, patient)
-values(132, "", "", "Кузнецов Владислав Миронович");
-insert into talons(id, reception, doctor, patient)
-values(133, "", "", "Кузнецов Владислав Миронович");
-insert into talons(id, reception, doctor, patient)
-values(134, "", "", "Кузнецов Владислав Миронович");
-insert into talons(id, reception, doctor, patient)
-values(135, "", "", "Кузнецов Владислав Миронович");
-insert into talons(id, reception, doctor, patient)
-values(136, "", "", "Анисимова Яна Степановна");
-insert into talons(id, reception, doctor, patient)
-values(137, "", "", "Анисимова Яна Степановна");
-insert into talons(id, reception, doctor, patient)
-values(138, "", "", "Анисимова Яна Степановна");
-insert into talons(id, reception, doctor, patient)
-values(139, "", "", "Анисимова Яна Степановна");
-insert into talons(id, reception, doctor, patient)
-values(140, "", "", "Романов Михаил Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(141, "", "", "Романов Михаил Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(142, "", "", "Романов Михаил Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(143, "", "", "Романов Михаил Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(144, "", "", "Савин Роман Альбертович");
-insert into talons(id, reception, doctor, patient)
-values(145, "", "", "Савин Роман Альбертович");
-insert into talons(id, reception, doctor, patient)
-values(146, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(147, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(148, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(149, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(150, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(151, "", "", "Носов Никита Михайлович");
-insert into talons(id, reception, doctor, patient)
-values(152, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(153, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(154, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(155, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(156, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(157, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(158, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(159, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(160, "", "", "Власов Максим Иванович");
-insert into talons(id, reception, doctor, patient)
-values(161, "", "", "Гаврилова Дарья Григорьевна");
-insert into talons(id, reception, doctor, patient)
-values(162, "", "", "Гаврилова Дарья Григорьевна");
-insert into talons(id, reception, doctor, patient)
-values(163, "", "", "Смирнов Константин Семёнович");
-insert into talons(id, reception, doctor, patient)
-values(164, "", "", "Смирнов Константин Семёнович");
-insert into talons(id, reception, doctor, patient)
-values(165, "", "", "Смирнов Константин Семёнович");
-insert into talons(id, reception, doctor, patient)
-values(166, "", "", "Зуева Тамара Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(167, "", "", "Зуева Тамара Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(168, "", "", "Семенов Даниил Иванович");
-insert into talons(id, reception, doctor, patient)
-values(169, "", "", "Семенов Даниил Иванович");
-insert into talons(id, reception, doctor, patient)
-values(170, "", "", "Семенов Даниил Иванович");
-insert into talons(id, reception, doctor, patient)
-values(171, "", "", "Семенов Даниил Иванович");
-insert into talons(id, reception, doctor, patient)
-values(172, "", "", "Кузьмина Александра Альбертовна");
-insert into talons(id, reception, doctor, patient)
-values(173, "", "", "Кузьмина Александра Альбертовна");
-insert into talons(id, reception, doctor, patient)
-values(174, "", "", "Кузьмина Александра Альбертовна");
-insert into talons(id, reception, doctor, patient)
-values(175, "", "", "Кузьмина Александра Альбертовна");
-insert into talons(id, reception, doctor, patient)
-values(176, "", "", "Макаров Владислав Робертович");
-insert into talons(id, reception, doctor, patient)
-values(177, "", "", "Макаров Владислав Робертович");
-insert into talons(id, reception, doctor, patient)
-values(178, "", "", "Макаров Владислав Робертович");
-insert into talons(id, reception, doctor, patient)
-values(179, "", "", "Макаров Владислав Робертович");
-insert into talons(id, reception, doctor, patient)
-values(180, "", "", "Смирнова Александра Данииловна");
-insert into talons(id, reception, doctor, patient)
-values(181, "", "", "Смирнова Александра Данииловна");
-insert into talons(id, reception, doctor, patient)
-values(182, "", "", "Смирнова Александра Данииловна");
-insert into talons(id, reception, doctor, patient)
-values(183, "", "", "Смирнова Александра Данииловна");
-insert into talons(id, reception, doctor, patient)
-values(184, "", "", "Панова Стефания Руслановна");
-insert into talons(id, reception, doctor, patient)
-values(185, "", "", "Панова Стефания Руслановна");
-insert into talons(id, reception, doctor, patient)
-values(186, "", "", "Панова Стефания Руслановна");
-insert into talons(id, reception, doctor, patient)
-values(187, "", "", "Панова Стефания Руслановна");
-insert into talons(id, reception, doctor, patient)
-values(188, "", "", "Сидорова Алиса Романовна");
-insert into talons(id, reception, doctor, patient)
-values(189, "", "", "Сидорова Алиса Романовна");
-insert into talons(id, reception, doctor, patient)
-values(190, "", "", "Сидорова Алиса Романовна");
-insert into talons(id, reception, doctor, patient)
-values(191, "", "", "Сидорова Алиса Романовна");
-insert into talons(id, reception, doctor, patient)
-values(192, "", "", "Еремин Илья Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(193, "", "", "Еремин Илья Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(194, "", "", "Еремин Илья Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(195, "", "", "Еремин Илья Кириллович");
-insert into talons(id, reception, doctor, patient)
-values(196, "", "", "Ситников Алексей Ярославович");
-insert into talons(id, reception, doctor, patient)
-values(197, "", "", "Ситников Алексей Ярославович");
-insert into talons(id, reception, doctor, patient)
-values(198, "", "", "Ситников Алексей Ярославович");
-insert into talons(id, reception, doctor, patient)
-values(199, "", "", "Молчанов Руслан Алексеевич");
-insert into talons(id, reception, doctor, patient)
-values(200, "", "", "Молчанов Руслан Алексеевич");
-insert into talons(id, reception, doctor, patient)
-values(201, "", "", "Молчанов Руслан Алексеевич");
-insert into talons(id, reception, doctor, patient)
-values(202, "", "", "Молчанов Руслан Алексеевич");
-insert into talons(id, reception, doctor, patient)
-values(203, "", "", "Молчанов Руслан Алексеевич");
-insert into talons(id, reception, doctor, patient)
-values(204, "", "", "Данилова Василиса Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(205, "", "", "Данилова Василиса Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(206, "", "", "Данилова Василиса Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(207, "", "", "Данилова Василиса Кирилловна");
-insert into talons(id, reception, doctor, patient)
-values(208, "", "", "Александрова Анастасия Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(209, "", "", "Александрова Анастасия Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(210, "", "", "Александрова Анастасия Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(211, "", "", "Александрова Анастасия Дмитриевна");
-insert into talons(id, reception, doctor, patient)
-values(212, "", "", "Фролов Владимир Александрович");
-insert into talons(id, reception, doctor, patient)
-values(213, "", "", "Фролов Владимир Александрович");
-insert into talons(id, reception, doctor, patient)
-values(214, "", "", "Фролов Владимир Александрович");
-insert into talons(id, reception, doctor, patient)
-values(215, "", "", "Фролов Владимир Александрович");
-insert into talons(id, reception, doctor, patient)
-values(216, "", "", "Гаврилова Аврора Романовна");
-insert into talons(id, reception, doctor, patient)
-values(217, "", "", "Гаврилова Аврора Романовна");
-insert into talons(id, reception, doctor, patient)
-values(218, "", "", "Гаврилова Аврора Романовна");
-insert into talons(id, reception, doctor, patient)
-values(219, "", "", "Гаврилова Аврора Романовна");
-insert into talons(id, reception, doctor, patient)
-values(220, "", "", "Борисов Алексей Николаевич");
-insert into talons(id, reception, doctor, patient)
-values(221, "", "", "Борисов Алексей Николаевич");
-insert into talons(id, reception, doctor, patient)
-values(222, "", "", "Борисов Алексей Николаевич");
-insert into talons(id, reception, doctor, patient)
-values(223, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(224, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(225, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(226, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(227, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(228, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(229, "", "", "Меркулова Вера Фёдоровна");
-insert into talons(id, reception, doctor, patient)
-values(230, "", "", "Фадеев Евгений Леонович");
-insert into talons(id, reception, doctor, patient)
-values(231, "", "", "Фадеев Евгений Леонович");
-insert into talons(id, reception, doctor, patient)
-values(232, "", "", "Ершов Савелий Павлович");
-insert into talons(id, reception, doctor, patient)
-values(233, "", "", "Ершов Савелий Павлович");
-insert into talons(id, reception, doctor, patient)
-values(234, "", "", "Ершов Савелий Павлович");
-insert into talons(id, reception, doctor, patient)
-values(235, "", "", "Ершов Савелий Павлович");
-insert into talons(id, reception, doctor, patient)
-values(236, "", "", "Рыжов Александр Тихонович");
-insert into talons(id, reception, doctor, patient)
-values(237, "", "", "Рыжов Александр Тихонович");
-insert into talons(id, reception, doctor, patient)
-values(238, "", "", "Рыжов Александр Тихонович");
-insert into talons(id, reception, doctor, patient)
-values(239, "", "", "Стасенко Константин Юрьевич");
-insert into talons(id, reception, doctor, patient)
-values(240, "", "", "Стасенко Константин Юрьевич");
-insert into talons(id, reception, doctor, patient)
-values(241, "", "", "Стасенко Константин Юрьевич");
-insert into talons(id, reception, doctor, patient)
-values(242, "", "", "Стасенко Константин Юрьевич");
-insert into talons(id, reception, doctor, patient)
-values(243, "", "", "Стасенко Константин Юрьевич");
+create table cassettes(
+    id integer not null primary key,
+    price float not null,
+    film not null,
+    year integer not null,
 
--- -- запрос пациентов по диагнозу
--- select P.sfm, P.diagnose, D.sfm
--- from patients as P join doctors as D
--- on D.id = P.doctor
--- where diagnose == "расстройство";
---
--- -- запрос пациентов по доктору
--- select P.sfm, P.diagnose, D.sfm
--- from patients as P join doctors as D
--- on P.doctor = D.id
--- where doctor == 10;
---
--- -- запрос имен врачей, экспертов и пациентов с их диагнозами в случае инфаркта или инсульта
--- select D.sfm, Ex.sfm, P.sfm, P.diagnose, E.incident
--- from expertise as E join doctors as D join patients as P join experts as Ex
--- where E.incident in ("инфаркт", "инсульт") and E.doctor == D.id and E.patient == P.id and E.expert == Ex.id;
---
--- -- запрос невыписанных пациентов с их диагнозами и имен их врачей
--- select D.sfm, P.sfm, P.diagnose, P.admission
--- from doctors as D join patients as P
--- on D.id = P.doctor
--- where P.discharge is NULL;
---
--- -- запрос пациентов положенных в больницу до начала третьего тысячелетия, имен их врачей и их диагнозы
--- select D.sfm, P.sfm, P.diagnose, P.admission, P.discharge
--- from doctors as D join patients as P
--- on D.id = P.doctor
--- where P.admission < "2000-01-01";
---
--- -- запрос докторов, пациентов, инцидентов и экспертов 2-го уровня
--- select D.sfm, P.sfm, P.diagnose, Ex.sfm, E.incident
--- from doctors as D join patients as P join experts as Ex join expertise as E
--- where Ex.level == 2 and D.id == E.doctor and P.id == E.patient and Ex.id == E.expert;
---
--- -- запрос докторов, инцидентов и пациентов женского пола
--- select D.sfm, P.sfm, P.diagnose, E.incident
--- from doctors as D join patients as P join expertise as E
--- where P.sex != 0 and E.incident == "инфаркт" and D.id == E.doctor and P.id == E.patient
--- order by P.diagnose;
---
--- -- запрос пациентов с именами заканчивающимися на "а"
--- select P.sfm, P.diagnose
--- from patients as P
--- where P.sfm like "%а";
---
--- -- запрос докторов и пациентов из одного отделения
--- select D.sfm, P.sfm, P.diagnose, P.department
--- from doctors as D join patients as P
--- where P.department == D.department and D.id == P.doctor
--- order by P.department;
---
--- -- запрос пациентов и докторов специализирующихся на онкологии
--- select D.sfm, D.specialization, P.sfm, P.diagnose, P.department
--- from doctors as D join patients as P
--- where D.id == P.doctor and D.specialization == "онколог"
--- order by P.department;
+    foreign key(film, year) references films(name, year)
+);
+
+create table givings(
+    id integer not null primary key,
+    client integer not null,
+    cassette integer not null,
+    issued integer not null,
+
+    foreign key(client) references clients(id),
+    foreign key(cassette) references cassettes(id),
+    foreign key(issued) references librarians(id)
+);
+
+insert into clients(id, sfm, residence)
+values(1, "Тимофеев Алексей Васильевич", "ул. Напрудная 2-я, дом 76, квартира 266");
+insert into clients(id, sfm, residence)
+values(2, "Дидиченко Лилия Антоновна", "ул. Дуси Ковальчук, дом 131, квартира 161");
+insert into clients(id, sfm, residence)
+values(3, "Львов Фотий Васильевич", "ул. Черкасова, дом 193, квартира 996");
+insert into clients(id, sfm, residence)
+values(4, "Махов Аникита Вадимович", "ул. Бабаевская, дом 188, квартира 520");
+insert into clients(id, sfm, residence)
+values(5, "Сульженко Горислава Владиславовна", "ул. Мира 2-й пер, дом 196, квартира 444");
+insert into clients(id, sfm, residence)
+values(6, "Снежная Яна Геннадиевна", "ул. Демонстрационный проезд, дом 60, квартира 545");
+insert into clients(id, sfm, residence)
+values(7, "Романова Рада Платоновна", "ул. Кетчерская, дом 8, квартира 841");
+insert into clients(id, sfm, residence)
+values(8, "Прохорова Нинель Игоревна", "ул. Амурский 3-й пер, дом 80, квартира 215");
+insert into clients(id, sfm, residence)
+values(9, "Шершова Дина Михайловна", "ул. Чигорина, дом 75, квартира 828");
+insert into clients(id, sfm, residence)
+values(10, "Чудин Марк Иванович", "ул. Новоухтомское ш, дом 156, квартира 88");
+insert into clients(id, sfm, residence)
+values(11, "Шершов Кирилл Геннадиевич", "ул. Богайчука, дом 34, квартира 679");
+insert into clients(id, sfm, residence)
+values(12, "Пименова Викторина Сергеевна", "ул. Поперечная 3-я (Ново-Ковалево), дом 40, квартира 379");
+insert into clients(id, sfm, residence)
+values(13, "Быкова Любомила Валентиновна", "ул. Семеновская 2-я (Приморский), дом 102, квартира 24");
+insert into clients(id, sfm, residence)
+values(14, "Кожевников Юлий Семенович", "ул. Даля, дом 30, квартира 935");
+insert into clients(id, sfm, residence)
+values(15, "Максимчук Мира Григорьевна", "ул. Жерновская 4-я, дом 125, квартира 680");
+insert into clients(id, sfm, residence)
+values(16, "Редкий Эрнест Макарович", "Ермилов Доброслав Григорьевич");
+insert into clients(id, sfm, residence)
+values(17, "Царев Радован Русланович", "ул. Ямского Поля 1-я, дом 104, квартира 200");
+insert into clients(id, sfm, residence)
+values(18, "Журавель Марианна Ивановна", "ул. Сивашский 1-й пер, дом 70, квартира 989");
+insert into clients(id, sfm, residence)
+values(19, "Швец Катерина Ильинична", "ул. Неопалимовский 1-й пер, дом 45, квартира 71");
+insert into clients(id, sfm, residence)
+values(20, "Островская Марианна Иосифовна", "ул. Предпортовый 2-й проезд, дом 53, квартира 656");
+insert into clients(id, sfm, residence)
+values(21, "Алтырева Ганна Владиславовна", "ул. Радиальная 3-я, дом 80, квартира 756");
+insert into clients(id, sfm, residence)
+values(22, "Чапко Эрика Владимировна", "ул. Курляндская, дом 10, квартира 493");
+insert into clients(id, sfm, residence)
+values(23, "Сморчкова Аделаида Григорьевна", "ул. Российский пер, дом 91, квартира 810");
+insert into clients(id, sfm, residence)
+values(24, "Вострикова Ирина Геннадиевна", "ул. Академика Сахарова пр-кт, дом 73, квартира 693");
+insert into clients(id, sfm, residence)
+values(25, "Кондратьев Дементий Николаевич", "ул. Канонерский остров, дом 69, квартира 568");
+insert into clients(id, sfm, residence)
+values(26, "Валинин Фадей Эдуардович", "ул. Алексеевская 2-я, дом 39, квартира 672");
+insert into clients(id, sfm, residence)
+values(27, "Фомин Ефрем Денисович", "ул. Реки Большой Невки наб, дом 30, квартира 877");
+insert into clients(id, sfm, residence)
+values(28, "Пенкин Климент Иванович", "ул. Реки Каменки наб, дом 143, квартира 570");
+insert into clients(id, sfm, residence)
+values(29, "Аверина Ольга Николаевна", "ул. Павла Андреева, дом 11, квартира 643");
+insert into clients(id, sfm, residence)
+values(30, "Куколевский Болеслав Константинович", "ул. Центральный Хорошевского Серебряного Бор проезд, дом 180, квартира 16");
+
+insert into librarians(id, sfm)
+values(1, "Калинина Агата Васильевна");
+insert into librarians(id, sfm)
+values(2, "Пономарев Михаил Максимович");
+insert into librarians(id, sfm)
+values(3, "Терентьев Ярослав Ильич");
+insert into librarians(id, sfm)
+values(4, "Воронцова Ульяна Тиграновна");
+insert into librarians(id, sfm)
+values(5, "Павлов Ярослав Егорович");
+insert into librarians(id, sfm)
+values(6, "Федотова Аиша Максимовна");
+insert into librarians(id, sfm)
+values(7, "Артамонова Александра Максимовна");
+insert into librarians(id, sfm)
+values(8, "Панкратова София Львовна");
+insert into librarians(id, sfm)
+values(9, "Антонова Кристина Львовна");
+insert into librarians(id, sfm)
+values(10, "Соловьев Артур Михайлович");
+
+insert into films(name, year, director, genre, timeline, studio)
+values("Маяк", 2019, "Роберт Эггерс", "ужасы", 109, "А24");
+insert into films(name, year, director, genre, timeline, studio)
+values("Драйв", 2011, "Николас Виндинг Рефн", "криминал", 100, "Sierra Affinity");
+insert into films(name, year, director, genre, timeline, studio)
+values("Ведьма", 2015, "Роберт Эггерс", "ужасы", 92, "А24");
+insert into films(name, year, director, genre, timeline, studio)
+values("Неоновый демон", 2016, "Николас Виндинг Рефн", "драма", 117, "Gaumont");
+insert into films(name, year, director, genre, timeline, studio)
+values("Сталкер", 1979, "Андрей Тарковский", "фантастика", 163, "Мосфильм");
+insert into films(name, year, director, genre, timeline, studio)
+values("Солярис", 1972, "Андрей Тарковский", "фантастика", 169, "Мосфильм");
+insert into films(name, year, director, genre, timeline, studio)
+values("Голова-ластик", 1977, "Дэвид Линч", "ужасы", 90, "Absurda");
+insert into films(name, year, director, genre, timeline, studio)
+values("Внутренняя империя", 2006, "Дэвид Линч", "фэнтези", 180, "Canal");
+insert into films(name, year, director, genre, timeline, studio)
+values("Телохранитель", 1961, "Акира Куросава", "боевик", 110, "Janus Films");
+insert into films(name, year, director, genre, timeline, studio)
+values("Яйцо ангела", 1985, "Мамору Осии", "фантастика", 71, "DEEN");
+
+insert into cassettes (id, price, film, year)
+values(1, 100, "Маяк", 2019);
+insert into cassettes (id, price, film, year)
+values(2, 100, "Маяк", 2019);
+insert into cassettes (id, price, film, year)
+values(3, 100, "Маяк", 2019);
+insert into cassettes (id, price, film, year)
+values(4, 100, "Маяк", 2019);
+insert into cassettes (id, price, film, year)
+values(5, 100, "Драйв", 2011);
+insert into cassettes (id, price, film, year)
+values(6, 100, "Драйв", 2011);
+insert into cassettes (id, price, film, year)
+values(7, 100, "Драйв", 2011);
+insert into cassettes (id, price, film, year)
+values(8, 100, "Драйв", 2011);
+insert into cassettes (id, price, film, year)
+values(9, 100, "Драйв", 2011);
+insert into cassettes (id, price, film, year)
+values(10, 150, "Ведьма", 2015);
+insert into cassettes (id, price, film, year)
+values(11, 150, "Ведьма", 2015);
+insert into cassettes (id, price, film, year)
+values(12, 150, "Ведьма", 2015);
+insert into cassettes (id, price, film, year)
+values(13, 150, "Неоновый демон", 2016);
+insert into cassettes (id, price, film, year)
+values(14, 150, "Неоновый демон", 2016);
+insert into cassettes (id, price, film, year)
+values(15, 150, "Неоновый демон", 2016);
+insert into cassettes (id, price, film, year)
+values(16, 150, "Сталкер", 1979);
+insert into cassettes (id, price, film, year)
+values(17, 150, "Сталкер", 1979);
+insert into cassettes (id, price, film, year)
+values(18, 150, "Сталкер", 1979);
+insert into cassettes (id, price, film, year)
+values(19, 150, "Сталкер", 1979);
+insert into cassettes (id, price, film, year)
+values(20, 150, "Сталкер", 1979);
+insert into cassettes (id, price, film, year)
+values(21, 200, "Солярис", 1972);
+insert into cassettes (id, price, film, year)
+values(22, 200, "Солярис", 1972);
+insert into cassettes (id, price, film, year)
+values(23, 200, "Солярис", 1972);
+insert into cassettes (id, price, film, year)
+values(24, 200, "Солярис", 1972);
+insert into cassettes (id, price, film, year)
+values(25, 200, "Голова-ластик", 1977);
+insert into cassettes (id, price, film, year)
+values(26, 200, "Голова-ластик", 1977);
+insert into cassettes (id, price, film, year)
+values(27, 200, "Голова-ластик", 1977);
+insert into cassettes (id, price, film, year)
+values(28, 200, "Голова-ластик", 1977);
+insert into cassettes (id, price, film, year)
+values(29, 200, "Внутренняя империя", 2006);
+insert into cassettes (id, price, film, year)
+values(30, 200, "Внутренняя империя", 2006);
+insert into cassettes (id, price, film, year)
+values(31, 250, "Внутренняя империя", 2006);
+insert into cassettes (id, price, film, year)
+values(32, 250, "Внутренняя империя", 2006);
+insert into cassettes (id, price, film, year)
+values(33, 250, "Телохранитель", 1961);
+insert into cassettes (id, price, film, year)
+values(34, 250, "Телохранитель", 1961);
+insert into cassettes (id, price, film, year)
+values(35, 250, "Телохранитель", 1961);
+insert into cassettes (id, price, film, year)
+values(36, 250, "Телохранитель", 1961);
+insert into cassettes (id, price, film, year)
+values(37, 250, "Яйцо ангела", 1985);
+insert into cassettes (id, price, film, year)
+values(38, 250, "Яйцо ангела", 1985);
+insert into cassettes (id, price, film, year)
+values(39, 250, "Яйцо ангела", 1985);
+insert into cassettes (id, price, film, year)
+values(40, 250, "Яйцо ангела", 1985);
+
+insert into givings(id, client, cassette, issued)
+values(1, 1, 1, 1);
+insert into givings(id, client, cassette, issued)
+values(2, 2, 2, 1);
+insert into givings(id, client, cassette, issued)
+values(3, 3, 5, 1);
+insert into givings(id, client, cassette, issued)
+values(4, 4, 7, 1);
+insert into givings(id, client, cassette, issued)
+values(5, 5, 10, 2);
+insert into givings(id, client, cassette, issued)
+values(6, 6, 11, 2);
+insert into givings(id, client, cassette, issued)
+values(7, 7, 12, 2);
+insert into givings(id, client, cassette, issued)
+values(8, 8, 15, 2);
+insert into givings(id, client, cassette, issued)
+values(9, 9, 16, 3);
+insert into givings(id, client, cassette, issued)
+values(10, 10, 19, 3);
+insert into givings(id, client, cassette, issued)
+values(11, 11, 21, 3);
+insert into givings(id, client, cassette, issued)
+values(12, 12, 23, 3);
+insert into givings(id, client, cassette, issued)
+values(13, 13, 25, 4);
+insert into givings(id, client, cassette, issued)
+values(14, 14, 26, 4);
+insert into givings(id, client, cassette, issued)
+values(15, 15, 27, 4);
+insert into givings(id, client, cassette, issued)
+values(16, 16, 29, 4);
+insert into givings(id, client, cassette, issued)
+values(17, 17, 30, 5);
+insert into givings(id, client, cassette, issued)
+values(18, 18, 32, 5);
+insert into givings(id, client, cassette, issued)
+values(19, 19, 33, 10);
+insert into givings(id, client, cassette, issued)
+values(20, 10, 35, 5);
+insert into givings(id, client, cassette, issued)
+values(21, 21, 37, 6);
+insert into givings(id, client, cassette, issued)
+values(22, 22, 38, 6);
+insert into givings(id, client, cassette, issued)
+values(23, 23, 39, 6);
+insert into givings(id, client, cassette, issued)
+values(24, 24, 13, 6);
+insert into givings(id, client, cassette, issued)
+values(25, 25, 14, 7);
+insert into givings(id, client, cassette, issued)
+values(26, 26, 8, 9);
+insert into givings(id, client, cassette, issued)
+values(27, 27, 9, 7);
+insert into givings(id, client, cassette, issued)
+values(28, 28, 24, 7);
+insert into givings(id, client, cassette, issued)
+values(29, 29, 28, 8);
+insert into givings(id, client, cassette, issued)
+values(30, 30, 18, 8);
+
+-- запрос фильмов по цене
+select cs.id, f.name, f.year, f.director, cs.price
+from cassettes as cs join films as f
+on cs.film = f.name and cs.year = f.year
+where cs.price > N;
+
+-- запрос фильмов по хронометражу
+select cs.price, f.name, f.year, f.director, f.genre
+from films as f join cassettes as cs
+on f.name = cs.film and f.year = cs.year where f.timeline > N;
+
+-- запрос фильмов по жанрам
+select cs.price, f.name, f.year, f.director, f.genre
+from films as f join cassettes as cs
+on f.name = cs.film and f.year = cs.year where f.genre == N;
+
+-- запрос фильмов по годам
+select cs.price, f.name, f.year, f.director, f.genre
+from films as f join cassettes as cs
+on f.name = cs.film and f.year = cs.year where f.year > N;
+
+-- запрос фильмов по режиссерам
+select cs.price, f.name, f.year, f.director, f.genre
+from films as f join cassettes as cs
+on f.name = cs.film and f.year = cs.year where f.director == N;
+
+-- запрос невыданных кассет
+select cs.id, cs.price, f.name, f.year, f.director
+from cassettes as cs join films as f
+on cs.film = f.name and cs.year = f.year
+where cs.id not in (select g.cassette from givings as g);
+
+-- запрос выданных кассет
+select cs.id, cs.price, cs.film, cs.year, c.sfm
+from cassettes as cs join clients as c join givings as g
+on g.client = c.id and g.cassette = cs.id;
+
+-- запрос кассет по библиотекарям
+select l.sfm, cs.price, c.sfm, cs.film, cs.year
+from librarians as l join givings as g join cassettes as cs join clients as c
+on l.id = g.issued and c.id = g.client and g.cassette = cs.id where l.id == N;
