@@ -34,7 +34,7 @@ func allIP(address string) string {
 func listen(ch chan string) string {
 	myIP := localIp()
 	fmt.Println(myIP.String() + " listen")
-	pc, _ = net.ListenPacket("udp", allIP(myIP.String())+":12345")
+	pc, _ = net.ListenPacket("udp", myIP.String()+":12345")
 	//if err != nil {
 	//	mylog.Write([]byte(err.Error()))
 	//}

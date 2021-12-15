@@ -74,7 +74,7 @@ func main() {
 	defer mylog("Сервер отключен.")
 	mylog("Сервер запущен.")
 
-	pc, err := net.ListenPacket("udp", allIP(localAddr().String())+":12345")
+	pc, err := net.ListenPacket("udp", localAddr().String()+":12345")
 	if err != nil {
 		myerr(err.Error())
 	}
