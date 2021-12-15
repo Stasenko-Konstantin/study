@@ -5,4 +5,4 @@ cd ..
 rm -rf client/fyne-cross
 rm client/Icon.png
 cd server
-env GOOS=windows GOARCH=amd64 go build main.go
+env GOOS=windows CGO=1 GOARCH=amd64 go build main.go
