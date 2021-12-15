@@ -12,7 +12,10 @@ import (
 	_ "strings"
 )
 
-var mylog *myLogger
+var (
+	mylog *myLogger
+	w     fyne.Window
+)
 
 var (
 	patients = [][]string{[]string{"ID", "Страховая компания", "ФИО", "Место жительства",
@@ -34,7 +37,7 @@ func Start() {
 	}()
 
 	a := app.New()
-	w := a.NewWindow("практика")
+	w = a.NewWindow("практика")
 	w.Resize(fyne.NewSize(1800, 900))
 
 	connect()
