@@ -34,8 +34,12 @@ func localAddr() net.IP {
 func encode(s string) string {
 	r := ""
 	for _, l := range s {
-		c, _ := utf8.DecodeRuneInString(string(l + 3))
-		r += string(c)
+		if string(l) == "\n" {
+			r += string(l)
+		} else {
+			c, _ := utf8.DecodeRuneInString(string(l + 3))
+			r += string(c)
+		}
 	}
 	return r
 }
@@ -50,18 +54,12 @@ func decode(s string) string {
 }
 
 func send(address, msg string) {
-	conn, err := net.Dial("udp", address+":12345")
+	conn, err := net.Dial("udp", address)
 	if err != nil {
 		myerr("Не удалось отправить сообщение! " + err.Error())
 		return
 	}
 	fmt.Fprintf(conn, msg)
-}
-
-func allIP(address string) string {
-	parts := strings.Split(address, ".")
-	parts[3] = "255"
-	return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]
 }
 
 func main() {
@@ -112,7 +110,7 @@ func main() {
 			}
 			r += "\n"
 		}
-		send(address.String(), r)
+		send(address.String(), encode(r))
 		err = querys.Close()
 		if err != nil {
 			myerr(err.Error())
