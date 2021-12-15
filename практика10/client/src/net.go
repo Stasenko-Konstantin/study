@@ -60,7 +60,7 @@ func takeDB() string {
 	}()
 	myIP := localIp()
 	fmt.Println(myIP.String() + " takeDB")
-	querys := []string{"select * from clients", "select * from cassettes", "select * from films", "select * from librarians", "select * from givings"}
+	querys := []string{"select * from clients;", "select * from cassettes;", "select * from films;", "select * from librarians;", "select * from givings;"}
 	var r string
 	for _, q := range querys {
 		send(allIP(myIP.String()), encode(q), mylog)
