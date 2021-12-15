@@ -21,3 +21,22 @@ func localIp() net.IP {
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 	return localAddr.IP
 }
+
+func listen() {
+	myIP := localIp()
+	fmt.Println(myIP.String())
+	pc, err := net.ListenPacket("udp", myIP.String()+":12345")
+	if err != nil {
+		mylog.Write([]byte(err.Error()))
+	}
+	defer pc.Close()
+	for {
+		buf := make([]byte, 10000)
+		_, address, err := pc.ReadFrom(buf)
+		if err != nil {
+			mylog.Write([]byte(err.Error()))
+			continue
+		}
+		msg := decode(string(buf))
+	}
+}

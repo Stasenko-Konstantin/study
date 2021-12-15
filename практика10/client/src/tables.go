@@ -9,28 +9,38 @@ import (
 
 type database interface{}
 
-type doctor struct {
-	sfm            string
-	department     string
-	specialization string
-	district       sql.NullInt32
-}
-
-type patient struct {
-	id               int
-	insuranceCompany string
-	sfm              string
-	residence        string
-	birth            string
-	sex              bool
-	district         int
-}
-
-type talon struct {
+type clients struct {
 	id        int
-	reception string
-	doctor    string
-	patient   string
+	sfm       string
+	residence string
+}
+
+type librarians struct {
+	id  int
+	sfm string
+}
+
+type films struct {
+	name     string
+	year     string
+	director string
+	genre    string
+	timeline int
+	studio   string
+}
+
+type cassettes struct {
+	id    int
+	price float32
+	film  string
+	year  int
+}
+
+type givings struct {
+	id       int
+	client   int
+	cassette int
+	issued   int
 }
 
 type myDB sql.DB
@@ -44,10 +54,7 @@ func (db *myDB) save() {
 }
 
 func connect() {
-	db, err := sql.Open("sqlite3", "db.db")
-	if err != nil {
-		panic(err)
-	}
+	db = takeDB()
 
 	// доктора
 	doctors, err := db.Query("select * from doctors")

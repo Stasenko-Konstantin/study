@@ -5,6 +5,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"unicode/utf8"
 )
 
 type myLogger struct {
@@ -65,6 +66,24 @@ func contain(mas []string, e string) bool {
 		}
 	}
 	return false
+}
+
+func encode(s string) string {
+	r := ""
+	for _, l := range s {
+		c, _ := utf8.DecodeRuneInString(string(l + 3))
+		r += string(c)
+	}
+	return r
+}
+
+func decode(s string) string {
+	r := ""
+	for _, l := range s {
+		c, _ := utf8.DecodeRuneInString(string(l - 3))
+		r += string(c)
+	}
+	return r
 }
 
 func makePers() []string {

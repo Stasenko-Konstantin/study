@@ -24,8 +24,4 @@ require (
 	golang.org/x/text v0.3.3 // indirect
 )
 
-require (
-	github.com/Kodeworks/golang-image-ico v0.0.0-20141118225523-73f0f4cfade9 // indirect
-	github.com/fyne-io/fyne-cross v1.1.3 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
-)
+require gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect

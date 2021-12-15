@@ -17,19 +17,18 @@ import (
 	_ "strings"
 )
 
+var mylog *myLogger
+
 var (
 	patients = [][]string{[]string{"ID", "Страховая компания", "ФИО", "Место жительства",
 		"Дата рождения", "Пол", "Участок", ""}}
-	doctors    = [][]string{[]string{"ФИО", "Отделение", "Специализация", "Участок", ""}}
-	talons = [][]string{[]string{"ID", "Дата и время приема", "Доктор", "Пациент", ""}}
+	doctors = [][]string{[]string{"ФИО", "Отделение", "Специализация", "Участок", ""}}
+	talons  = [][]string{[]string{"ID", "Дата и время приема", "Доктор", "Пациент", ""}}
 )
 
-//
-// Последний запрос - Манежная !!!!!!!!!!!!!!
-//
-
 func Start() {
-	mylog := newLogger()
+	mylog = newLogger()
+	go listen()
 
 	defer func() {
 		if r := recover(); r != nil {
