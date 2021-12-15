@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -57,38 +58,10 @@ func send(address, msg string) {
 	fmt.Fprintf(conn, msg)
 }
 
-type clients struct {
-	id        int    `json:"id"`
-	sfm       string `json:"sfm"`
-	residence string `json:"residance"`
-}
-
-type librarians struct {
-	id  int    `json:"id"`
-	sfm string `json:"sfm"`
-}
-
-type films struct {
-	name     string `json:"name"`
-	year     string `json:"year"`
-	director string `json:"director"`
-	genre    string `json:"genre"`
-	timeline int    `json:"timeline"`
-	studio   string `json:"studio"`
-}
-
-type cassettes struct {
-	id    int     `json:"id"`
-	price float32 `json:"price"`
-	film  string  `json:"film"`
-	year  int     `json:"year"`
-}
-
-type givings struct {
-	id       int `json:"id"`
-	client   int `json:"client"`
-	cassette int `json:"cassette"`
-	issued   int `json:"issued"`
+func allIP(address string) string {
+	parts := strings.Split(address, ".")
+	parts[3] = "255"
+	return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]
 }
 
 func main() {
@@ -101,7 +74,7 @@ func main() {
 	defer mylog("Сервер отключен.")
 	mylog("Сервер запущен.")
 
-	pc, err := net.ListenPacket("udp", localAddr().String()+":12345")
+	pc, err := net.ListenPacket("udp", allIP(localAddr().String())+":12345")
 	if err != nil {
 		myerr(err.Error())
 	}
