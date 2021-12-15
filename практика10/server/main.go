@@ -87,7 +87,7 @@ func main() {
 			myerr("Ошибка подключения " + address.String() + ", " + err.Error())
 			continue
 		}
-		msg := decode(string(buf))
+		msg := strings.Split(decode(string(buf)), ";")[0] + ";"
 		mylog("Подключился " + address.String())
 		mylog("Запрос " + msg)
 		db, err := sql.Open("sqlite3", "db.db")
