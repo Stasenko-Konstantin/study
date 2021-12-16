@@ -2,9 +2,7 @@ package src
 
 import (
 	"fmt"
-	"fyne.io/fyne/v2/dialog"
 	"net"
-	"os"
 	"strings"
 )
 
@@ -53,11 +51,6 @@ func listen(ch chan string) string {
 }
 
 func takeDB() string {
-	defer func() {
-		if r := recover(); r != nil {
-			dialog.ShowConfirm("Ошибка", "Нет доступа к серверу!", func(a bool) { os.Exit(2) }, w)
-		}
-	}()
 	myIP := localIp()
 	fmt.Println(myIP.String() + " takeDB")
 	querys := []string{"select * from clients;", "select * from cassettes;", "select * from films;", "select * from librarians;", "select * from givings;"}
@@ -65,12 +58,13 @@ func takeDB() string {
 	for _, q := range querys {
 		send(allIP(myIP.String()), encode(q), mylog)
 		buf := make([]byte, 10000)
-		_, _, err := pc.(*net.UDPConn).ReadFromUDP(buf)
+		_, _, err := pc.ReadFrom(buf)
 		if err != nil {
 			mylog.Write([]byte(err.Error()))
 			return ""
 		}
 		r += "|||" + decode(string(buf))
 	}
+	fmt.Println(r)
 	return r
 }
