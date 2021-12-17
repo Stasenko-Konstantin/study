@@ -142,7 +142,8 @@ func Start() {
 	})
 	prices := makePrices()
 	priceS = widget.NewSelect(prices, func(price string) {
-		requestE.SetText("select cs.id, f.name, f.year, f.director, cs.price from cassettes as cs join films as f on cs.film = f.name and cs.year = f.year where cs.price " + op + " " +
+		requestE.SetText("cs.id, f.name, f.year, f.director, cs.price from cassettes as cs join films as f " +
+			"on cs.film = f.name and cs.year = f.year where cs.price " + op + " " +
 			price)
 	})
 	r1 := container.NewVBox(container.NewHBox(opS), priceS)
@@ -150,23 +151,95 @@ func Start() {
 	priceS.Refresh()
 	opS.SetSelectedIndex(0)
 
-	//2 выбрать фильмы по цене
-	var priceS *widget.Select
-	ops := []string{">", ">=", "<", "<=", "=="}
-	op := ops[0]
-	opS := widget.NewSelect(ops, func(opfS string) {
-		op = opfS
-		priceS.SetSelectedIndex(priceS.SelectedIndex())
+	//2 выбрать фильмы по хронометражу
+	var timeS *widget.Select
+	ops2 := []string{">", ">=", "<", "<=", "=="}
+	op2 := ops2[0]
+	opS2 := widget.NewSelect(ops2, func(opfS string) {
+		op2 = opfS
+		timeS.SetSelectedIndex(timeS.SelectedIndex())
 	})
-	prices := makePrices()
-	priceS = widget.NewSelect(prices, func(price string) {
-		requestE.SetText("select cs.id, f.name, f.year, f.director, cs.price from cassettes as cs join films as f on cs.film = f.name and cs.year = f.year where cs.price " + op + " " +
-			price)
+	times := makeTimes()
+	timeS = widget.NewSelect(times, func(time string) {
+		requestE.SetText("cs.price, f.name, f.year, f.director, f.genre from films as f join cassettes as cs " +
+			"on f.name = cs.film and f.year = cs.year where f.timeline " + op2 + " " +
+			time)
 	})
-	r1 := container.NewVBox(container.NewHBox(opS), priceS)
-	priceS.Move(fyne.NewPos(0, 10))
-	priceS.Refresh()
-	opS.SetSelectedIndex(0)
+	r2 := container.NewVBox(container.NewHBox(opS2), timeS)
+	timeS.Move(fyne.NewPos(0, 10))
+	timeS.Refresh()
+	opS2.SetSelectedIndex(0)
+
+	//3 выбрать фильмы по жанрам
+	genres := makeGenres()
+	genreS := widget.NewSelect(genres, func(genre string) {
+		requestE.SetText("cs.price, f.name, f.year, f.director, f.genre from films as f join cassettes as cs " +
+			"on f.name = cs.film and f.year = cs.year where f.genre == '" + genre + "'")
+	})
+	r3 := container.NewVBox(genreS)
+	genreS.Move(fyne.NewPos(0, 10))
+	genreS.Refresh()
+
+	//4 выбрать фильмы по годам
+	var yearS *widget.Select
+	ops4 := []string{">", ">=", "<", "<=", "=="}
+	op4 := ops4[0]
+	opS4 := widget.NewSelect(ops4, func(opfS string) {
+		op4 = opfS
+		yearS.SetSelectedIndex(yearS.SelectedIndex())
+	})
+	years := makeYears()
+	yearS = widget.NewSelect(years, func(year string) {
+		requestE.SetText("cs.price, f.name, f.year, f.director, f.genre from films as f join cassettes as cs " +
+			"on f.name = cs.film and f.year = cs.year where f.year " + op4 + " " +
+			year)
+	})
+	r4 := container.NewVBox(container.NewHBox(opS4), yearS)
+	yearS.Move(fyne.NewPos(0, 10))
+	yearS.Refresh()
+	opS4.SetSelectedIndex(0)
+
+	//5 выбрать фильмы по режиссерам
+	dirs := makeDirs()
+	dirS := widget.NewSelect(dirs, func(dir string) {
+		requestE.SetText("cs.price, f.name, f.year, f.director, f.genre from films as f join cassettes as cs " +
+			"on f.name = cs.film and f.year = cs.year where f.director '" + dir + "'")
+	})
+	r5 := container.NewVBox(dirS)
+	dirS.Move(fyne.NewPos(0, 10))
+	dirS.Refresh()
+
+	//6 выбрать (не-)выданные кассеты
+	cass := []string{
+		"Выданные кассеты",
+		"Не выданные кассеты",
+	}
+	casS := widget.NewSelect(cass, func(cas string) {
+		var req string
+		fmt.Println(cas)
+		switch cas {
+		case "Не выданные кассеты":
+			req = "cs.id, cs.price, f.name, f.year, f.director from cassettes as cs join films as f on cs.film = " +
+				"f.name and cs.year = f.year where cs.id not in (select g.cassette from givings as g)"
+		case "Выданные кассеты":
+			req = "cs.id, cs.price, cs.film, cs.year, c.sfm from cassettes as cs join clients as c " +
+				"join givings as g on g.client = c.id and g.cassette = cs.id"
+		}
+		requestE.SetText(req)
+	})
+	r6 := container.NewVBox(casS)
+	casS.Move(fyne.NewPos(0, 10))
+	casS.Refresh()
+
+	//7 выбрать кассеты по библиотекарям
+	libs := makeLibs()
+	libS := widget.NewSelect(libs, func(lib string) {
+		requestE.SetText("l.sfm, cs.price, c.sfm, cs.film, cs.year from librarians as l join givings as g join cassettes " +
+			"as cs join clients as c on l.id = g.issued and c.id = g.client and g.cassette = cs.id where l.id == " + findLib(lib))
+	})
+	r7 := container.NewVBox(libS)
+	libS.Move(fyne.NewPos(0, 10))
+	libS.Refresh()
 
 	priceS.SetSelectedIndex(0) // из первого запроса
 
@@ -178,7 +251,6 @@ func Start() {
 		r5.Hide()
 		r6.Hide()
 		r7.Hide()
-		r8.Hide()
 	}
 	hideAll()
 	r1.Show()
@@ -251,7 +323,7 @@ func Start() {
 						if err != nil {
 							mylog.Write([]byte(err.Error()))
 						}
-						send(allIP(myIP.String()), encode(requestE.Text+";"), mylog)
+						send(allIP(myIP.String()), encode("select "+requestE.Text+";"), mylog)
 						buf := make([]byte, 10000)
 						_, _, err = pc.ReadFrom(buf)
 						if err != nil {

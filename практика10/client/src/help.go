@@ -118,7 +118,7 @@ func makePrices() []string {
 	return r
 }
 
-func makeTimelines() []string {
+func makeTimes() []string {
 	var r []string
 	i := 0
 	for _, p := range films {
@@ -132,6 +132,79 @@ func makeTimelines() []string {
 	}
 	sort.Strings(r)
 	return r
+}
+
+func makeGenres() []string {
+	var r []string
+	i := 0
+	for _, p := range films {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[3]) {
+				r = append(r, p[3])
+			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func makeDirs() []string {
+	var r []string
+	i := 0
+	for _, p := range films {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[2]) {
+				r = append(r, p[2])
+			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func makeYears() []string {
+	var r []string
+	i := 0
+	for _, p := range films {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[1]) {
+				r = append(r, p[1])
+			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func makeLibs() []string {
+	var r []string
+	i := 0
+	for _, p := range librarians {
+		if i == 0 {
+			i += 1
+		} else {
+			if !contain(r, p[1]) {
+				r = append(r, p[1])
+			}
+		}
+	}
+	sort.Strings(r)
+	return r
+}
+
+func findLib(sfm string) string {
+	for _, l := range librarians {
+		if l[1] == sfm {
+			return l[0]
+		}
+	}
+	return ""
 }
 
 //func (rs *Rows) ScanString(dest *[]*NullString) error {
