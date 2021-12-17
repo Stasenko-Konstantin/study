@@ -1,7 +1,6 @@
 package src
 
 import (
-	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -44,6 +43,5 @@ type givings struct {
 var dbs []database
 
 func connect() {
-	db := takeDB()
-	fmt.Println(db)
+	takeDB()
 }

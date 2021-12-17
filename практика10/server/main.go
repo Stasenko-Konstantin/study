@@ -62,7 +62,19 @@ func send(address, msg string) {
 	fmt.Fprintf(conn, msg)
 }
 
+func allIP(address string) string {
+	parts := strings.Split(address, ".")
+	parts[3] = "255"
+	return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]
+}
+
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			s := r.(error)
+			mylog(s.Error() + " aga\n")
+		}
+	}()
 	f, err := os.Open("log.txt")
 	if err != nil {
 		log.Fatalf("Не удалось открыть файл логов!", err)
@@ -71,13 +83,15 @@ func main() {
 	logger = log.New(f, "", log.LstdFlags)
 	defer mylog("Сервер отключен.")
 	mylog("Сервер запущен.")
-
-	pc, err := net.ListenPacket("udp", localAddr().String()+":12345")
+	db, err := sql.Open("sqlite3", "db.db")
 	if err != nil {
-		myerr(err.Error())
+		myerr("Ошибка получения данных из базы " + err.Error())
 	}
-	defer pc.Close()
 	for {
+		pc, err := net.ListenPacket("udp", localAddr().String()+":12345")
+		if err != nil {
+			myerr(err.Error())
+		}
 		var r string
 		buf := make([]byte, 1024)
 		_, address, err := pc.ReadFrom(buf)
@@ -88,10 +102,6 @@ func main() {
 		msg := strings.Split(decode(string(buf)), ";")[0] + ";"
 		mylog("Подключился " + address.String())
 		mylog("Запрос " + msg)
-		db, err := sql.Open("sqlite3", "db.db")
-		if err != nil {
-			myerr("Ошибка получения данных из базы " + err.Error())
-		}
 		querys, err := db.Query(msg)
 		if err != nil {
 			myerr(err.Error())
@@ -105,16 +115,18 @@ func main() {
 			i++
 		}
 		for _, e := range res {
+			var p string
 			for _, ee := range *e {
-				r += (*ee).String + " "
+				p += (*ee).String + " "
 			}
-			r += "\n"
+			r += p + "\\n"
 		}
-		send(address.String(), encode(r))
+		send(allIP(localAddr().String())+":12345", "бананы лопала бомба$|"+encode(r)+"|||")
 		err = querys.Close()
 		if err != nil {
 			myerr(err.Error())
 		}
-		db.Close()
+		pc.Close()
 	}
+	db.Close()
 }

@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"net"
 	"strings"
+	"time"
 )
 
-var pc net.PacketConn
+var myIP = localIp()
 
 func send(address, msg string, log *myLogger) {
 	conn, err := net.Dial("udp", address+":12345")
@@ -32,7 +33,7 @@ func allIP(address string) string {
 }
 
 func listen(ch chan string) string {
-	myIP := localIp()
+	var err error
 	fmt.Println(myIP.String() + " listen")
 	pc, err := net.ListenPacket("udp", myIP.String()+":12345")
 	if err != nil {
@@ -51,20 +52,39 @@ func listen(ch chan string) string {
 }
 
 func takeDB() string {
-	myIP := localIp()
+	defer func() {
+		if r := recover(); r != nil {
+			s := r.(error)
+			mylog.Write([]byte(s.Error() + " AGA\n"))
+		}
+	}()
 	fmt.Println(myIP.String() + " takeDB")
 	querys := []string{"select * from clients;", "select * from cassettes;", "select * from films;", "select * from librarians;", "select * from givings;"}
 	var r string
 	for _, q := range querys {
-		send(allIP(myIP.String()), encode(q), mylog)
-		buf := make([]byte, 10000)
-		_, _, err := pc.ReadFrom(buf)
+	again:
+		myIP := localIp()
+		fmt.Println(myIP.String() + " listen")
+		pc, err := net.ListenPacket("udp", myIP.String()+":12345")
 		if err != nil {
 			mylog.Write([]byte(err.Error()))
+		}
+		time.Sleep(1)
+		send(allIP(myIP.String()), encode(q), mylog)
+		buf := make([]byte, 10000)
+		_, _, err = pc.ReadFrom(buf)
+		if err != nil {
+			mylog.Write([]byte("AGAAA" + err.Error()))
 			return ""
 		}
-		r += "|||" + decode(string(buf))
+		msg := strings.Split(string(buf), "$|")
+		if msg[0] != "бананы лопала бомба" {
+			pc.Close()
+			goto again
+		}
+		fmt.Println(decode(string(buf)))
+		r += "|||" + decode(msg[1])
+		pc.Close()
 	}
-	fmt.Println(r)
 	return r
 }

@@ -2,7 +2,7 @@ package src
 
 import (
 	"fmt"
-	"fyne.io/fyne/v2"
+	fyne "fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
@@ -26,8 +26,6 @@ var (
 
 func Start() {
 	mylog = newLogger()
-	var ch chan string
-	go listen(ch)
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -42,6 +40,8 @@ func Start() {
 
 	connect()
 	mylog.Write([]byte("DB connection complete\n"))
+	var ch chan string
+	go listen(ch)
 
 	//for _, e := range dbs {
 	//	switch e.(type) {
