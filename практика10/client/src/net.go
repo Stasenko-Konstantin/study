@@ -32,25 +32,6 @@ func allIP(address string) string {
 	return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]
 }
 
-func listen(ch chan string) string {
-	var err error
-	fmt.Println(myIP.String() + " listen")
-	pc, err := net.ListenPacket("udp", myIP.String()+":12345")
-	if err != nil {
-		mylog.Write([]byte(err.Error()))
-	}
-	for {
-		buf := make([]byte, 10000)
-		_, _, err := pc.ReadFrom(buf)
-		if err != nil {
-			mylog.Write([]byte(err.Error()))
-			continue
-		}
-		msg := decode(string(buf))
-		ch <- msg
-	}
-}
-
 func takeDB() string {
 	defer func() {
 		if r := recover(); r != nil {
@@ -64,7 +45,6 @@ func takeDB() string {
 	for _, q := range querys {
 	again:
 		myIP := localIp()
-		fmt.Println(myIP.String() + " listen")
 		pc, err := net.ListenPacket("udp", myIP.String()+":12345")
 		if err != nil {
 			mylog.Write([]byte(err.Error()))
@@ -82,7 +62,6 @@ func takeDB() string {
 			pc.Close()
 			goto again
 		}
-		fmt.Println(decode(string(buf)))
 		r += "|||" + decode(msg[1])
 		pc.Close()
 	}

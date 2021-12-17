@@ -8,7 +8,9 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 	_ "github.com/mattn/go-sqlite3"
+	"net"
 	"os"
+	"strings"
 	_ "strings"
 )
 
@@ -18,10 +20,12 @@ var (
 )
 
 var (
-	patients = [][]string{[]string{"ID", "Страховая компания", "ФИО", "Место жительства",
-		"Дата рождения", "Пол", "Участок", ""}}
-	doctors = [][]string{[]string{"ФИО", "Отделение", "Специализация", "Участок", ""}}
-	talons  = [][]string{[]string{"ID", "Дата и время приема", "Доктор", "Пациент", ""}}
+	clients   = table{row{"ID", "ФИО", "Место жительства", ""}}
+	cassettes = table{row{"ID", "Стоимость", "Фильм", ""}}
+	films     = table{row{"Название", "Год выпуска", "Режиссер", "Жанр",
+		"Хронометраж", "Производитель", ""}}
+	librarians = table{row{"ID", "ФИО", ""}}
+	givings    = table{row{"ID", "Клиент", "Кассета", "Выдана"}}
 )
 
 func Start() {
@@ -40,58 +44,79 @@ func Start() {
 
 	connect()
 	mylog.Write([]byte("DB connection complete\n"))
-	var ch chan string
-	go listen(ch)
 
-	//for _, e := range dbs {
-	//	switch e.(type) {
-	//	case []patient:
-	//		for _, p := range e.([]patient) {
-	//			var sex string
-	//			if p.sex {
-	//				sex = "Ж."
-	//			} else {
-	//				sex = "М."
-	//			}
-	//			birth := strings.Split(p.birth, "T")[0]
-	//			patients = append(patients, []string{strconv.Itoa(p.id), p.insuranceCompany, p.sfm, p.residence,
-	//				birth, sex, strconv.Itoa(p.district), ""})
-	//		}
-	//	case []doctor:
-	//		for _, d := range e.([]doctor) {
-	//			doctors = append(doctors, []string{d.sfm, d.department, d.specialization, strconv.Itoa(int(d.district.Int32)), ""})
-	//		}
-	//	case []talon:
-	//		for _, t := range e.([]talon) {
-	//			r := strings.Split(t.reception, "T")
-	//			r[1] = r[1][0:5]
-	//			reception := stringConcat(r, " ")
-	//			talons = append(talons, []string{strconv.Itoa(t.id), reception, t.doctor, t.patient, ""})
-	//		}
-	//	}
-	//}
-
-	mylog.Write([]byte("Data is full\n"))
-
-	patientsT := widget.NewTable(
+	clientsT := widget.NewTable(
 		func() (int, int) {
-			return len(patients), len(patients[0])
+			return len(clients), len(clients[0])
 		},
 		func() fyne.CanvasObject {
 			return container.NewVBox(widget.NewEntry())
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-			//if i.Row == 0 {
-			//	o.(*fyne.Container).Objects[0] = widget.NewLabel(patients[i.Row][i.Col])
-			//} else if i.Col == 7 {
-			//	o.(*fyne.Container).Objects[0] = widget.NewButton("", func() {
-			//		fmt.Println(i.Col, i.Row)
-			//	})
-			//} else {
-			//	o.(*fyne.Container).Objects[0].(*widget.Entry).SetText(patients[i.Row][i.Col])
-			//}
+			o.(*fyne.Container).Objects[0] = widget.NewLabel(clients[i.Row][i.Col])
 		})
-	patientsT.SetColumnWidth(0, 50.0)
+	clientsT.SetColumnWidth(0, 50.0)
+	clientsT.SetColumnWidth(1, 300.0)
+	clientsT.SetColumnWidth(2, 650.0)
+
+	cassettesT := widget.NewTable(
+		func() (int, int) {
+			return len(cassettes), len(cassettes[0])
+		},
+		func() fyne.CanvasObject {
+			return container.NewVBox(widget.NewEntry())
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*fyne.Container).Objects[0] = widget.NewLabel(cassettes[i.Row][i.Col])
+		})
+	cassettesT.SetColumnWidth(0, 50.0)
+	cassettesT.SetColumnWidth(1, 100.0)
+	cassettesT.SetColumnWidth(2, 230.0)
+
+	filmsT := widget.NewTable(
+		func() (int, int) {
+			return len(films), len(films[0])
+		},
+		func() fyne.CanvasObject {
+			return container.NewVBox(widget.NewEntry())
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*fyne.Container).Objects[0] = widget.NewLabel(films[i.Row][i.Col])
+		})
+	filmsT.SetColumnWidth(0, 200.0)
+	filmsT.SetColumnWidth(1, 130.0)
+	filmsT.SetColumnWidth(2, 200.0)
+	filmsT.SetColumnWidth(3, 150.0)
+	filmsT.SetColumnWidth(4, 150.0)
+	filmsT.SetColumnWidth(5, 200.0)
+
+	librariansT := widget.NewTable(
+		func() (int, int) {
+			return len(librarians), len(librarians[0])
+		},
+		func() fyne.CanvasObject {
+			return container.NewVBox(widget.NewEntry())
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*fyne.Container).Objects[0] = widget.NewLabel(librarians[i.Row][i.Col])
+		})
+	librariansT.SetColumnWidth(0, 50.0)
+	librariansT.SetColumnWidth(1, 300.0)
+
+	givingsT := widget.NewTable(
+		func() (int, int) {
+			return len(givings), len(givings[0])
+		},
+		func() fyne.CanvasObject {
+			return container.NewVBox(widget.NewEntry())
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*fyne.Container).Objects[0] = widget.NewLabel(givings[i.Row][i.Col])
+		})
+	givingsT.SetColumnWidth(0, 50.0)
+	givingsT.SetColumnWidth(1, 100.0)
+	givingsT.SetColumnWidth(2, 100.0)
+	givingsT.SetColumnWidth(3, 100.0)
 
 	mylog.Write([]byte("Table template ready\n"))
 
@@ -108,85 +133,89 @@ func Start() {
 	requestE := widget.NewEntry()
 
 	//1 выбрать фильмы по цене
-	var filmS *widget.Select
+	var priceS *widget.Select
 	ops := []string{">", ">=", "<", "<=", "=="}
 	op := ops[0]
 	opS := widget.NewSelect(ops, func(opfS string) {
 		op = opfS
-		filmS.SetSelectedIndex(filmS.SelectedIndex())
+		priceS.SetSelectedIndex(priceS.SelectedIndex())
 	})
-	films := makePers()
-	filmS = widget.NewSelect(films, func(film string) {
+	prices := makePrices()
+	priceS = widget.NewSelect(prices, func(price string) {
 		requestE.SetText("select cs.id, f.name, f.year, f.director, cs.price from cassettes as cs join films as f on cs.film = f.name and cs.year = f.year where cs.price " + op + " " +
-			film)
+			price)
 	})
-	r1 := container.NewVBox(container.NewHBox(opS), filmS)
-	filmS.Move(fyne.NewPos(0, 10))
-	filmS.Refresh()
+	r1 := container.NewVBox(container.NewHBox(opS), priceS)
+	priceS.Move(fyne.NewPos(0, 10))
+	priceS.Refresh()
 	opS.SetSelectedIndex(0)
 
-	filmS.SetSelectedIndex(0) // из первого запроса
+	//2 выбрать фильмы по цене
+	var priceS *widget.Select
+	ops := []string{">", ">=", "<", "<=", "=="}
+	op := ops[0]
+	opS := widget.NewSelect(ops, func(opfS string) {
+		op = opfS
+		priceS.SetSelectedIndex(priceS.SelectedIndex())
+	})
+	prices := makePrices()
+	priceS = widget.NewSelect(prices, func(price string) {
+		requestE.SetText("select cs.id, f.name, f.year, f.director, cs.price from cassettes as cs join films as f on cs.film = f.name and cs.year = f.year where cs.price " + op + " " +
+			price)
+	})
+	r1 := container.NewVBox(container.NewHBox(opS), priceS)
+	priceS.Move(fyne.NewPos(0, 10))
+	priceS.Refresh()
+	opS.SetSelectedIndex(0)
+
+	priceS.SetSelectedIndex(0) // из первого запроса
 
 	hideAll := func() {
 		r1.Hide()
-		//r2.Hide()
-		//r3.Hide()
-		//r4.Hide()
-		//r5.Hide()
-		//r6.Hide()
-		//r7.Hide()
-		//r8.Hide()
-		//r9.Hide()
-		//r10.Hide()
+		r2.Hide()
+		r3.Hide()
+		r4.Hide()
+		r5.Hide()
+		r6.Hide()
+		r7.Hide()
+		r8.Hide()
 	}
 	hideAll()
 	r1.Show()
 
 	rs := []string{
 		"Фильмы по цене",
-		//"Врачи лечившие конкретного пациента",
-		//"Пациенты лечившиеся у конкретного врача",
-		//"Пациенты с одного участка",
-		//"Пациенты, пользующиеся одной страховой компанией",
-		//"Пациенты за определенный период по дате их рождения",
-		//"Пациенты, лечившиеся у докторов определенной специализации",
-		//"Пациенты, лечившиеся у докторов из одного отделения",
-		//"Пациенты одного пола",
-		//"Пациенты, живущие по одному и тому же месту жительствая",
+		"Фильмы по хронометражу",
+		"Фильмы по жанрам",
+		"Фильмы по годам",
+		"Фильмы по режиссерам",
+		"(Не-)выданные кассеты",
+		"Кассеты по библиотекарям",
 	}
 	requests := widget.NewSelect(rs, func(r string) {
 		hideAll()
 		switch r {
 		case rs[0]:
 			r1.Show()
-			filmS.SetSelectedIndex(0)
-			//case rs[1]:
-			//	r2.Show()
-			//	patS.SetSelectedIndex(0)
-			//case rs[2]:
-			//	r3.Show()
-			//	docS.SetSelectedIndex(0)
-			//case rs[3]:
-			//	r4.Show()
-			//	depS.SetSelectedIndex(0)
-			//case rs[4]:
-			//	r5.Show()
-			//	cmpS.SetSelectedIndex(0)
-			//case rs[5]:
-			//	r6.Show()
-			//	brtS.SetSelectedIndex(0)
-			//case rs[6]:
-			//	r7.Show()
-			//	spcS.SetSelectedIndex(0)
-			//case rs[7]:
-			//	r8.Show()
-			//	otdS.SetSelectedIndex(0)
-			//case rs[8]:
-			//	r9.Show()
-			//	sexS.SetSelectedIndex(0)
-			//case rs[9]:
-			//	r10.Show()
-			//	adrS.SetSelectedIndex(0)
+			priceS.SetSelectedIndex(0)
+		case rs[1]:
+			r2.Show()
+			timeS.SetSelectedIndex(0)
+		case rs[2]:
+			r3.Show()
+			genreS.SetSelectedIndex(0)
+		case rs[3]:
+			r4.Show()
+			yearS.SetSelectedIndex(0)
+		case rs[4]:
+			r5.Show()
+			dirS.SetSelectedIndex(0)
+		case rs[5]:
+			r6.Show()
+			casS.SetSelectedIndex(0)
+		case rs[6]:
+			r7.Show()
+			libS.SetSelectedIndex(0)
 		}
 	})
 	requests.SetSelectedIndex(0)
@@ -194,15 +223,12 @@ func Start() {
 	requestsC := container.NewVBox(
 		requests,
 		r1,
-		//r2,
-		//r3,
-		//r4,
-		//r5,
-		//r6,
-		//r7,
-		//r8,
-		//r9,
-		//r10,
+		r2,
+		r3,
+		r4,
+		r5,
+		r6,
+		r7,
 		requestE,
 	)
 	requestsC.Move(fyne.NewPos(0.0, 300.0))
@@ -212,12 +238,28 @@ func Start() {
 	mylog.Write([]byte("Request fields ready\n"))
 
 	tabs := container.NewAppTabs(
-		container.NewTabItem("Пациенты", patientsT),
+		container.NewTabItem("Клиенты", clientsT),
+		container.NewTabItem("Кассеты", cassettesT),
+		container.NewTabItem("Фильмы", filmsT),
+		container.NewTabItem("Библиотекари", librariansT),
+		container.NewTabItem("Выдачи", givingsT),
 		container.NewTabItem("Запросы", container.NewWithoutLayout(
 			container.NewHBox(
 				widget.NewButton("Запрос", func() {
 					go func() {
-						result.SetText(<-ch)
+						pc, err := net.ListenPacket("udp", myIP.String()+":12345")
+						if err != nil {
+							mylog.Write([]byte(err.Error()))
+						}
+						send(allIP(myIP.String()), encode(requestE.Text+";"), mylog)
+						buf := make([]byte, 10000)
+						_, _, err = pc.ReadFrom(buf)
+						if err != nil {
+							mylog.Write([]byte("AGAAA" + err.Error()))
+							return
+						}
+						msg := decode(strings.Split(string(buf), "$|")[1])
+						result.SetText(read(msg))
 					}()
 				}),
 				widget.NewButton("Печать", func() {
@@ -240,7 +282,7 @@ func Start() {
 			requestsC,
 		)))
 
-	prog := "Программа по производственной практике №2 \"Разработка программы для работы с базой данных\""
+	prog := "Программа по учебной практике №10 \"Разработка программы для работы с удаленной базой данных\""
 	author := "Курсант 432 гр. ТАТК ГА Стасенко Константин"
 
 	mainMenu := fyne.NewMainMenu(fyne.NewMenu("Меню",

@@ -86,57 +86,26 @@ func decode(s string) string {
 	return r
 }
 
-func makePers() []string {
-	var r []string
-	i := 0
-	for _, p := range talons {
-		if i == 0 {
-			i += 1
-		} else {
-			cp := strings.Split(p[1], " ")[0]
-			if !contain(r, cp) && cp != "0001-01-01" {
-				r = append(r, cp)
-			}
+func read(msg string) string {
+	var r string
+	m := strings.Split(msg, "\\n")
+	for n, e := range m {
+		if n == len(m)-1 {
+			break
 		}
-	}
-	sort.Strings(r)
-	return r
-}
-
-func makeDocs() []string {
-	var r []string
-	i := 0
-	for _, p := range talons {
-		if i == 0 {
-			i += 1
-		} else {
-			if !contain(r, p[2]) {
-				r = append(r, p[2])
-			}
+		m := strings.Split(e, "-|-")
+		for _, ee := range m {
+			r += ee + " "
 		}
+		r += "\n"
 	}
 	return r
 }
 
-func makeDeps() []string {
+func makePrices() []string {
 	var r []string
 	i := 0
-	for _, p := range patients {
-		if i == 0 {
-			i += 1
-		} else {
-			if !contain(r, p[6]) {
-				r = append(r, p[6])
-			}
-		}
-	}
-	return r
-}
-
-func makeCmps() []string {
-	var r []string
-	i := 0
-	for _, p := range patients {
+	for _, p := range cassettes {
 		if i == 0 {
 			i += 1
 		} else {
@@ -145,83 +114,23 @@ func makeCmps() []string {
 			}
 		}
 	}
-	return r
-}
-
-func makeBrts() []string {
-	var r []string
-	i := 0
-	for _, p := range patients {
-		if i == 0 {
-			i += 1
-		} else {
-			cp := strings.Split(p[4], " ")[0]
-			if !contain(r, cp) && cp != "0001-01-01" {
-				r = append(r, cp)
-			}
-		}
-	}
 	sort.Strings(r)
 	return r
 }
 
-func makeSpcs() []string {
+func makeTimelines() []string {
 	var r []string
 	i := 0
-	for _, d := range doctors {
+	for _, p := range films {
 		if i == 0 {
 			i += 1
 		} else {
-			if !contain(r, d[2]) {
-				r = append(r, d[2])
+			if !contain(r, p[4]) {
+				r = append(r, p[4])
 			}
 		}
 	}
-	return r
-}
-
-func makeOtds() []string {
-	var r []string
-	i := 0
-	for _, d := range doctors {
-		if i == 0 {
-			i += 1
-		} else {
-			if !contain(r, d[1]) {
-				r = append(r, d[1])
-			}
-		}
-	}
-	return r
-}
-
-func makeAdrs() []string {
-	var r []string
-	i := 0
-	for _, p := range patients {
-		if i == 0 {
-			i += 1
-		} else {
-			if !contain(r, p[3]) {
-				r = append(r, p[3])
-			}
-		}
-	}
-	return r
-}
-
-func makePats() []string {
-	var r []string
-	i := 0
-	for _, p := range patients {
-		if i == 0 {
-			i += 1
-		} else {
-			if !contain(r, p[2]) {
-				r = append(r, p[2])
-			}
-		}
-	}
+	sort.Strings(r)
 	return r
 }
 
