@@ -3,117 +3,180 @@ package src
 import (
 	"errors"
 	"fmt"
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func sum(smth string) (int, string) {
-	var r int
-	for _, e := range smth {
-		e, err := strconv.Atoi(string(e))
-		if err != nil {
-			return 0, err.Error()
-		}
-		r += e
+type book []string
+
+var books = [][]string{
+	book{"АВТОР", "КНИГА", "ИЗДАТЕЛЬСТВО", "ГОД ИЗДАНИЯ"},
+}
+
+func checkErr(err error) {
+	fmt.Println(err.Error())
+}
+
+func checkDate(olddate string, w *fyne.Window) error {
+	date, err := strconv.Atoi(olddate)
+	if err != nil {
+		dialog.ShowError(errors.New("Неверная дата - "+olddate+", вводите только цифры!"), *w)
+		return errors.New("")
 	}
-	return r, "nil"
+	curr := time.Now().Year()
+	if date < 1700 || date > curr+1 {
+		dialog.ShowError(errors.New("Неверная дата - "+olddate+", вводите дату в диапазоне от 1700 до "+strconv.Itoa(curr+1)), *w)
+		return errors.New("")
+	}
+	return nil
+}
+
+func getPeriod(start, end int) string {
+	var res string
+	for _, b := range books {
+		year, _ := strconv.Atoi(b[3])
+		if year >= start && year <= end {
+			res += stringConcat(b, ", ") + "\n"
+		}
+	}
+	return res
+}
+
+func stringConcat(vals []string, del string) string {
+	var r string
+	for _, e := range vals {
+		r += e + " " + del
+	}
+	return r
 }
 
 func Start() {
+
+	defer func() {
+		if r := recover(); r != nil {
+			s := r.(error)
+			fmt.Println(s.Error() + " aga")
+		}
+	}()
+
+	text, err := os.ReadFile("test.txt")
+	if err != nil {
+		checkErr(err)
+	}
+	texts := strings.Split(string(text), "\n")
+	for _, t := range texts {
+		var r []string
+		elems := strings.Split(t, ", ")
+		if len(elems) != 4 {
+			continue
+		}
+		for _, e := range elems {
+			r = append(r, e)
+		}
+		books = append(books, r)
+	}
+
 	a := app.New()
-	w := a.NewWindow("dnc")
-	w.Resize(fyne.NewSize(400, 200))
-	w.CenterOnScreen()
+	w := a.NewWindow("модуль")
+	w.Resize(fyne.NewSize(1800, 900))
 
-	dayE := widget.NewEntry()
-	monthE := widget.NewEntry()
-	happyYearL := widget.NewLabel("")
+	booksT := widget.NewTable(
+		func() (int, int) {
+			return len(books), 4
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("")
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			book := books[i.Row][i.Col]
+			o.(*widget.Label).SetText(book)
+		})
+	booksT.SetColumnWidth(0, 170.0)
+	booksT.SetColumnWidth(1, 300.0)
+	booksT.SetColumnWidth(2, 170.0)
+	booksT.SetColumnWidth(3, 100.0)
 
-	dayE.FocusGained()
+	result := widget.NewMultiLineEntry()
+	result.Disable()
+	result.Move(fyne.NewPos(0.0, 0.0))
+	result.Resize(fyne.NewSize(1800, 250))
+	start := widget.NewEntry()
+	end := widget.NewEntry()
 
-	w.SetContent(container.NewVBox(
-		widget.NewLabel("Введите день и месяц своего рождения\nПосле нажатия кнопки \"Ok\" выведется ваш\nближайший счастливый год"),
+	requestC := container.NewVBox(
+		container.NewVBox(
+			widget.NewLabel("Дата начала:"),
+			start,
+			widget.NewLabel("Дата окончания:"),
+			end,
+		),
 		container.NewHBox(
-			widget.NewLabel("День:"),
-			dayE,
-			widget.NewLabel("Месяц:"),
-			monthE,
-			widget.NewButton("Ok", func() {
-				day, err := strconv.Atoi(dayE.Text)
-				if err != nil {
-					dialog.ShowError(errors.New("День должен быть числом!"), w)
+			widget.NewButton("Запрос", func() {
+
+				start := start.Text
+				end := end.Text
+				err1 := checkDate(start, &w)
+				err2 := checkDate(end, &w)
+				if err1 != nil || err2 != nil {
 					return
 				}
-				month, err := strconv.Atoi(monthE.Text)
-				if err != nil {
-					dialog.ShowError(errors.New("Месяц должен быть числом!"), w)
-					return
+				startn, _ := strconv.Atoi(start)
+				endn, _ := strconv.Atoi(end)
+				if startn > endn {
+					dialog.ShowError(errors.New("Дата начала не может быть больше даты окончания!"), w)
 				}
-				if month < 1 || month > 12 {
-					dialog.ShowError(errors.New("Месяц должен быть от 1 до 12!"), w)
-					return
-				}
-				limit := 31
-				if (month < 8 && month % 2 == 0) || (month > 8 && month % 2 == 1) {
-					limit = 30
-				}
-				if month == 2 {
-					limit = 28
-				}
-				if day < 1 || day > limit {
-					dialog.ShowError(errors.New("День должен быть от 1 до " + strconv.Itoa(limit)), w)
-					return
-				}
-				sumD, myerr := sum(strconv.Itoa(day))
-				if myerr != "nil" {
-					dialog.ShowError(errors.New(myerr), w)
-					return
-				}
-				sumM, myerr := sum(strconv.Itoa(month))
-				if myerr != "nil" {
-					dialog.ShowError(errors.New(myerr), w)
-					return
-				}
-				currYear := strings.Split(time.Now().String(), "-")[0]
-				for {
-					fmt.Println(currYear)
-					sumY, myerr := sum(currYear)
-					if myerr != "nil" {
-						dialog.ShowError(errors.New(myerr), w)
+				result.SetText(getPeriod(startn, endn))
+
+			}),
+			widget.NewButton("Печать", func() {
+				dialog.ShowFileSave(func(closer fyne.URIWriteCloser, err error) {
+					defer func() {
+						if r := recover(); r != nil {
+							s := r.(error)
+							fmt.Println(s.Error() + " aga")
+						}
+					}()
+					if closer == nil {
 						return
 					}
-					if sumY % 10 == sumD % 10 || sumY % 10 == sumM % 10 {
-						happyYearL.SetText(currYear)
-						return
-					}
-					prevYear, err := strconv.Atoi(currYear)
 					if err != nil {
-						dialog.ShowError(err, w)
-						return
+						panic(err)
 					}
-					currYear = strconv.Itoa(prevYear + 1)
-				}
+					path := closer.URI().Path()
+					closer.Close()
+					text := []byte(result.Text)
+					os.WriteFile(path, text, 0644)
+				}, w)
 			}),
 		),
-		container.NewHBox(
-			widget.NewLabel("Ближайший счастливый год: "),
-			happyYearL,
-		),
+	)
+	requestC.Move(fyne.NewPos(0.0, 255.0))
+	requestC.Resize(fyne.NewSize(200, 200))
+	requestC.Refresh()
+
+	tabs := container.NewAppTabs(
+		container.NewTabItem("Книги", booksT),
+		container.NewTabItem("Запросы", container.NewWithoutLayout(
+			result,
+			requestC,
+		)))
+
+	prog := "Система обслуживания читателя в библиотеке"
+	author := "Курсант 432 гр. ТАТК ГА Стасенко Константин"
+
+	mainMenu := fyne.NewMainMenu(fyne.NewMenu("Меню",
+		fyne.NewMenuItem("О программе", func() { dialog.ShowInformation("О программе", prog, w) }),
+		fyne.NewMenuItem("Об авторе", func() { dialog.ShowInformation("Об авторе", author, w) }),
 	))
 
-	prog := "Программа по \"Документации и сертификации\":\n\"Разработка программы для вычисления\nсвоего ближайшего счастливого года\""
-	author := "Курсант 432 гр. ТАТК ГА Стасенко Константин"
-	mainMenu := fyne.NewMainMenu(fyne.NewMenu("Menu",
-		fyne.NewMenuItem("Program", func() { dialog.ShowInformation("О программе", prog, w) }),
-		fyne.NewMenuItem("Author", func() { dialog.ShowInformation("Об авторе", author, w) }),
-	))
 	w.SetMainMenu(mainMenu)
 
+	w.SetContent(tabs)
 	w.ShowAndRun()
 }
