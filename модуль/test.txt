@@ -1,0 +1,7 @@
+Лавкрафт Г.Ф., Хребты Безумия, Иностранка, 2021
+Джексон Д., Software Abstractions, The MIT Press, 2012
+Эшварла П., Practical System Programming, Packt, 2020
+Гранин А., Functional Design and Architecture, Manning, 2019
+Пайк Р., Практика программирования, Вильямс, 2015
+Дейкстра Э., Структурное программирование, Мир, 1975
+Ахо А.В., Компиляторы, Вильямс, 2008
