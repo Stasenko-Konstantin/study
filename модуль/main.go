@@ -24,23 +24,24 @@ func checkErr(err error) {
 	fmt.Println(err.Error())
 }
 
-func checkDate(olddate string, w *fyne.Window) {
+func checkDate(olddate string, w *fyne.Window) error {
 	date, err := strconv.Atoi(olddate)
 	if err != nil {
 		dialog.ShowError(errors.New("Неверная дата - "+olddate+", вводите только цифры!"), *w)
+		return errors.New("")
 	}
 	curr := time.Now().Year()
 	if date < 1700 || date > curr+1 {
 		dialog.ShowError(errors.New("Неверная дата - "+olddate+", вводите дату в диапазоне от 1700 до "+strconv.Itoa(curr+1)), *w)
+		return errors.New("")
 	}
+	return nil
 }
 
-func getPeriod(start, end string) string {
+func getPeriod(start, end int) string {
 	var res string
 	for _, b := range books {
 		year, _ := strconv.Atoi(b[3])
-		start, _ := strconv.Atoi(start)
-		end, _ := strconv.Atoi(end)
 		if year >= start && year <= end {
 			res += stringConcat(b, ", ") + "\n"
 		}
@@ -56,7 +57,7 @@ func stringConcat(vals []string, del string) string {
 	return r
 }
 
-func Start() {
+func main() {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -121,9 +122,17 @@ func Start() {
 				go func() {
 					start := start.Text
 					end := end.Text
-					checkDate(start, &w)
-					checkDate(end, &w)
-					result.SetText(getPeriod(start, end))
+					err1 := checkDate(start, &w)
+					err2 := checkDate(end, &w)
+					if err1 != nil || err2 != nil {
+						return
+					}
+					startn, _ := strconv.Atoi(start)
+					endn, _ := strconv.Atoi(end)
+					if startn > endn {
+						dialog.ShowError(errors.New("Дата начала не может быть больше даты окончания!"), w)
+					}
+					result.SetText(getPeriod(startn, endn))
 				}()
 			}),
 			widget.NewButton("Печать", func() {
