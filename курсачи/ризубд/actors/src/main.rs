@@ -21,17 +21,11 @@ impl Handler<Msg> for Integrator {
     type Result = f64;
 
     // обработчик сообщений
-    fn handle(&mut self, msg: Msg, _ctx: &mut Self::Context) -> Self::Result {
-        let a = msg.0;
-        let b = msg.1;
-        let n = msg.2;
-
+    fn handle(&mut self, Msg(a, b, n): Msg, _ctx: &mut Self::Context) -> Self::Result {
         let h = (b - a) / (n as f64); // шаг интегрирования
         let mut res = 0.5 * (f(a) + f(b)) * h;
-        let mut i = 1;
-        while i < n {
+        for i in 1..n {
             res += f(a + (i as f64) * h) * h;
-            i += 1;
         }
         res
     }
@@ -43,8 +37,8 @@ fn f(x: f64) -> f64 { // интегрируемая функция
 
 #[actix::main]
 async fn main() {
-    let a: f64 = 0.; // левый конец интервала
-    let b: f64 = 1.; // правый конец интервала
+    let a: f64 = 0.;   // левый конец интервала
+    let b: f64 = 1.;   // правый конец интервала
     let n = 100000000; // число точек разбиения
 
     let mut result: f64 = 0.;
@@ -74,13 +68,15 @@ async fn main() {
     }
 
     for i in 0..actors.len() { // получение результатов
-        let len = (b - a) / (p as f64); // длина отрезка интегрирования для текущего актора
-        let local_n = n / p; // число точек разбиения для текущего актора
-        let local_a = a + (i as f64) * len; // левый конец интервала для текущего актора
-        let local_b = local_a + len; // правй конец интервала
-        let msg = Msg(local_a, local_b, local_n as i32); // отрпавка сообщения актору
-        result += actors[i].send(msg).await.unwrap(); // получение результата
-        result = result
+        let len = (b - a) / (p as f64);    // длина отрезка интегрирования для текущего актора
+        let n = n / p;                     // число точек разбиения для текущего актора
+        let a = a + (i as f64) * len;      // левый конец интервала для текущего актора
+        let b = a + len;                   // правый конец интервала
+        let msg = Msg(a, b, n as i32);     // отправка сообщения актору
+        result += actors[i]                // получение результата
+            .send(msg)
+            .await
+            .unwrap();
     }
     println!("Интеграл от {} до {} = {}", a, b, result);
 }
