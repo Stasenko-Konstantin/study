@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -54,14 +55,16 @@ var (
 		`</h3>
                     <p class="text-white">`, // описание
 		`</p>
-                    <a href="#" class="btn btn-slide btn-rounded btn-hover-color-main-1 ">Далее</a>
+                    <a href="`, // № игры
+		`" class="btn btn-slide btn-rounded btn-hover-color-main-1 ">Далее</a>
                 </div>
             </div>`,
 	}
 	mainList = []string{
 		`<div class="col-md-6">
                             <div class="blog-post">
-                                <a href="article" class="post-img post-img-main">
+                                <a href="`, // № игры
+		`" class="post-img post-img-main">
                                     <img src="assets/games/`, // № игры
 		`/image1.jpg" alt="">
                                 </a>
@@ -74,8 +77,8 @@ var (
 		`</p>
                                 </div>
                                 <div class="gap"></div>
-                                <a href="article"
-                                   class="btn btn-main btn-rounded btn-hover-color-main-1">Далее</a>
+                                <a href="`, // № игры
+		`" class="btn btn-main btn-rounded btn-hover-color-main-1">Далее</a>
                             </div>
                         </div>`,
 	}
@@ -83,13 +86,15 @@ var (
 		`<div class="blog-post">
                         <div class="row vertical-gap">
                             <div class="col-md-5 col-lg-6">
-                                <a href="article" class="post-img">
+                                <a href="`, // № игры
+		`" class="post-img">
                                     <img src="assets/games/`, // № игры
 		`/image1.jpg" alt="">
 								</a>
                             </div>
                             <div class="col-md-7 col-lg-6">
-                                <h2 class="post-title h4"><a href="article">`, // название
+                                <h2 class="post-title h4"><a href="`, // № игры
+		`">`, // название
 		`</a></h2>
                                 <div class="post-text">
                                     <p>`, // описание
@@ -97,6 +102,22 @@ var (
                                 </div>
                             </div>
                         </div>
+                    </div>`,
+	}
+	articleList = []string{
+		`<div class="post-img blog-post-img">
+                            <img src="assets/games/`, // № игры
+		`/image2.jpg" alt=""></div>
+                        <div class="gap-1"></div>
+                        <h1 class="post-title h4">`, // название
+		`</h1>
+                        <div class="gap"></div>
+                        <p>`, // описание
+		`<div class="pagination pagination-center">
+                        <a href="`, // файл
+		`" class="pagination-prev">
+                            Скачать
+                        </a>
                     </div>`,
 	}
 )
@@ -135,14 +156,6 @@ func splitSentences(d string) string {
 	return r
 }
 
-func handler(h string, w http.ResponseWriter, r *http.Request) {
-	file, err := os.ReadFile("assets/" + h + ".html")
-	if err != nil {
-		fmt.Fprintf(w, "Server error: "+err.Error())
-	}
-	fmt.Fprintf(w, string(file))
-}
-
 func gamesHandler(w http.ResponseWriter, r *http.Request) {
 	var gamesList []string
 	file, err := os.ReadFile("assets/games.html")
@@ -158,7 +171,8 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "cant make game struct: "+err.Error())
 			os.Exit(1)
 		}
-		tmp = append(tmp, gameList[0]+g.number+gameList[1]+g.name+gameList[2]+splitSentences(g.description)+gameList[3]+"ㅤ")
+		tmp = append(tmp, gameList[0]+g.number+gameList[1]+g.number+gameList[2]+g.number+gameList[3]+g.name+
+			gameList[4]+splitSentences(g.description)+gameList[5]+"ㅤ")
 	}
 	gamesList = append([]string{}, gamesList[0]+sliceToStr(tmp)+gamesList[1])
 	fmt.Fprintf(w, sliceToStr(gamesList))
@@ -180,7 +194,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(os.Stderr, "cant make game struct: "+err.Error())
 			os.Exit(1)
 		}
-		tmp = append(tmp, slide[0]+g.number+slide[1]+g.number+slide[2]+g.name+slide[3]+g.description+slide[4])
+		tmp = append(tmp, slide[0]+g.number+slide[1]+g.number+slide[2]+g.name+slide[3]+g.description+slide[4]+g.number+slide[5])
 	}
 	index = append([]string{}, index[0]+sliceToStr(tmp)+index[1])
 	index = strings.Split(index[0], "Главный список")
@@ -191,10 +205,30 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(os.Stderr, "cant make game struct: "+err.Error())
 			os.Exit(1)
 		}
-		tmp = append(tmp, mainList[0]+g.number+mainList[1]+g.name+mainList[2]+splitSentences(g.description)+mainList[3])
+		tmp = append(tmp, mainList[0]+g.number+mainList[1]+g.number+mainList[2]+g.name+mainList[3]+
+			splitSentences(g.description)+mainList[4]+g.number+mainList[5])
 	}
 	index = append([]string{}, index[0]+sliceToStr(tmp)+index[1])
 	fmt.Fprintf(w, sliceToStr(index))
+}
+
+func articleHandler(n string, w http.ResponseWriter, r *http.Request) {
+	var article []string
+	file, err := os.ReadFile("assets/article.html")
+	if err != nil {
+		fmt.Fprintf(w, "Server error: "+err.Error())
+		os.Exit(1)
+	}
+	article = strings.Split(string(file), "Содержимое")
+	g, err := newGame(findGame(n))
+	if err != nil {
+		fmt.Fprintf(w, "cant make game struct: "+err.Error())
+		os.Exit(1)
+	}
+	article = append([]string{},
+		article[0]+articleList[0]+g.number+articleList[1]+g.name+articleList[2]+
+			g.description+articleList[3]+g.file+articleList[4]+article[1])
+	fmt.Fprintf(w, sliceToStr(article))
 }
 
 func getGames() (gameDir, error) {
@@ -203,6 +237,16 @@ func getGames() (gameDir, error) {
 		return gameDir{}, err
 	}
 	return dirs, nil
+}
+
+func findGame(g string) fs.FileInfo {
+	for _, i := range gameDirs {
+		if i.Name() == g {
+			return i
+		}
+	}
+	fmt.Println("AGAGAGAGAGAGAGAGAGAGAGA")
+	return gameDirs[0]
 }
 
 func main() {
@@ -216,8 +260,12 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", indexHandler).Methods("GET")
 	r.HandleFunc("/games", gamesHandler).Methods("GET")
-	r.HandleFunc("/article",
-		func(w http.ResponseWriter, r *http.Request) { handler("article", w, r) }).Methods("GET")
+	for i := 1; i < len(gameDirs)+1; i++ {
+		n := strconv.Itoa(i)
+		r.HandleFunc("/"+n, func(w http.ResponseWriter, r *http.Request) {
+			articleHandler(n, w, r)
+		}).Methods("GET")
+	}
 	staticFileDir := http.Dir("./assets/")
 	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDir))
 	r.PathPrefix("/assets/").Handler(staticFileHandler).Methods("GET")
