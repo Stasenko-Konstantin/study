@@ -35,23 +35,6 @@
                             class="fab fa-github"></span></a></li>
                 </ul>
             </div>
-            <div class="contacts-right">
-                <ul class="top-right-icons">
-
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#modalSearch">
-                            <span class="fa fa-search"></span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#modalLogin">
-                            <span class="fa fa-user"></span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
         </div>
     </div>
 
@@ -87,9 +70,30 @@
         </div>
 
         <div class="gap-2"></div>
+
+        <div class="tabs">
+            <ul class="nav nav-tabs nav-tabs-fill" role="tablist">
+                <li class="nav-item">
+                    <a class="text-main-2 nav-link" href="rpg" >rpg</a>
+                </li>
+                <li class="nav-item">
+                    <a class="text-main-2 nav-link" href="beat em up" >beat em up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="text-main-2 nav-link" href="arcade" >arcade</a>
+                </li>
+                <li class="nav-item">
+                    <a class="text-main-2 nav-link" href="platform" >platform</a>
+                </li>
+                <li class="nav-item">
+                    <a class="text-main-2 nav-link" href="run and gun" >run and gun</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="gap-2"></div>
         <div class="row vertical-gap">
             <div class="col-lg-8">
-                <h3 class="decorated-h-2"></h3>
                 <div class="gap" style="color: #00aff0"></div>
                 <div class="nk-blog-grid">
                     <div class="row">
@@ -127,58 +131,6 @@
 <img class="page-background-top" src="assets/images/bg-main.png" alt="">
 <img class="page-background-bottom" src="assets/images/bg-bottom.png" alt="">
 
-<div class="modal modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="ion-android-close"></span>
-                </button>
-                <h4 class="mb-0">Поиск</h4>
-                <div class="gap-1"></div>
-                <form action="#" class="nk-form form-style-1">
-                    <input type="text" value="" name="search" class="form-control"
-                           placeholder="Напечатайте что-нибудь и нажмите Enter" autofocus>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="ion-android-close"></span>
-                </button>
-                <h4 class="mb-0"><span class="text-main-1">Войти<br><br></span></h4>
-                <div class="gap-1"></div>
-                <form action="#" class="nk-form text-white">
-                    <div class="row vertical-gap">
-                        Введите логин и пароль:
-                        <small><br>ㅤ</small>
-
-                        <div class="gap"></div>
-                        <input type="text" value="" name="login" class=" form-control" placeholder="Логин">
-
-                        <div class="gap"></div>
-                        <input type="password" value="" name="password" class="required form-control"
-                               placeholder="Пароль">
-                    </div>
-
-                    <div class="gap-2"></div>
-                    <div class="pagination">
-                        <a href="#"
-                           class="btn btn-main btn-rounded btn-block">Войти</a>
-                        <a href="#"
-                           class="btn btn-main btn-rounded btn-block">Регистрация</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="assets/vendor/object-fit-images/dist/ofi.min.js"></script>
 <script src="assets/vendor/gsap/src/minified/TweenMax.min.js"></script>

@@ -5297,6 +5297,11 @@ img.rounded {
     margin-left: 10px;
 }
 
+.genre {
+    text-shadow: 2px 2px #0b0e10;
+    background-color: rgba(0 0 0 / 55%);
+}
+
 .tabs .nav-tabs .nav-item, .tabs .nav-tabs .nav-item:focus, .tabs .nav-tabs .nav-item:hover,
 .tabs .nav-tabs .nav-link,
 .tabs .nav-tabs .nav-link:focus,
